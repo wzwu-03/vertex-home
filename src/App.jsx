@@ -59,13 +59,6 @@ function App() {
     },
   ]
 
-  const principles = [
-    'Independent and neutral',
-    'Explicitly non-commercial',
-    'Respectful of limited time',
-    'Grounded in operational reality',
-  ]
-
   const handleChange = (event) => {
     const { name, value } = event.target
 
@@ -150,16 +143,16 @@ function App() {
 
         <section className="stats-strip" aria-label="Verex research summary" id="scope">
           <div>
-            <strong>Bottom-up research</strong>
-            <span>grounded in operator experience rather than assumptions</span>
+            <strong>Ontario clinic sample</strong>
+            <span>focused on private healthcare operators across Toronto and the GTA</span>
           </div>
           <div>
-            <strong>No product exists</strong>
-            <span>this is discovery work rather than a sales process</span>
+            <strong>Short-form outreach</strong>
+            <span>built around concise conversations intended to gather operational insight</span>
           </div>
           <div>
-            <strong>Brief conversations</strong>
-            <span>structured to remain respectful, neutral, and efficient</span>
+            <strong>Pattern-based analysis</strong>
+            <span>designed to compare recurring operational issues across many clinics</span>
           </div>
         </section>
 
@@ -226,13 +219,13 @@ function App() {
               generate revenue, where efficiency is lost, and which operational issues
               recur frequently enough to justify focused attention.
             </p>
-            <div className="integration-note principle-card">
-              <strong>Tone and posture</strong>
-              <ul className="principle-list">
-                {principles.map((principle) => (
-                  <li key={principle}>{principle}</li>
-                ))}
-              </ul>
+            <div className="integration-note">
+              <strong>Research output</strong>
+              <p>
+                The resulting analysis is intended to highlight the most common revenue
+                drivers, administrative bottlenecks, and operational issues affecting
+                private clinics across the target market.
+              </p>
             </div>
           </div>
 
@@ -253,14 +246,14 @@ function App() {
             <h2>Clinic operators and staff may share their contact details here if they are open to participating.</h2>
             <p>
               This is an optional way for clinic owners, office managers, administrators,
-              and staff to indicate that they may be open to a brief conversation. It is
-              not a product signup, and no service is being sold.
+              and staff to indicate that they may be open to a brief conversation about
+              operational challenges within their clinic.
             </p>
             <div className="integration-note">
-              <strong>Future data infrastructure</strong>
+              <strong>Submission note</strong>
               <p>
-                This form can later be connected to Supabase so participation interest,
-                research notes, and clinic responses can be stored in a structured dataset.
+                The form below is intended to collect initial contact details and brief
+                context ahead of outreach.
               </p>
             </div>
           </div>
@@ -329,8 +322,8 @@ function App() {
 
             <p className={`form-status ${submitted ? 'is-visible' : ''}`} aria-live="polite">
               {submitted
-                ? 'Thank you. This form is currently front-end only and is prepared for a future Supabase connection.'
-                : 'This form is currently front-end only. No backend database is connected at this stage.'}
+                ? 'Thank you. Your details have been noted in this preview experience.'
+                : 'Use this form to provide contact details and a brief description of the issue.'}
             </p>
           </form>
         </section>
