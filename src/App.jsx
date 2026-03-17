@@ -1,14 +1,35 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 function App() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    clinic: '',
-    role: '',
-    note: '',
-  })
   const [submitted, setSubmitted] = useState(false)
+  const [currentStep, setCurrentStep] = useState(1)
+  const [touched, setTouched] = useState({})
+  const [attemptedStepAdvance, setAttemptedStepAdvance] = useState(false)
+
+  const [formData, setFormData] = useState({
+    // Step 1: Profile
+    fullName: '',
+    email: '',
+    phone: '',
+    companyName: '',
+    industry: '',
+    role: '',
+
+    // Step 2: Context
+    customerType: '',
+    businessSize: '',
+    painPoint: '',
+    currentSolution: '',
+    frequency: '',
+
+    // Step 3: Preferences
+    budgetExpectation: '',
+    timeline: '',
+    preferredFollowUp: '',
+    location: '',
+    additionalNotes: '',
+    consent: false,
+  })
 
   const focusAreas = [
     {
@@ -58,30 +79,185 @@ function App() {
     },
   ]
 
+  const steps = [
+    { id: 1, label: 'Profile' },
+    { id: 2, label: 'Context' },
+    { id: 3, label: 'Preferences' },
+  ]
+
+  const industryOptions = [
+    'Family practice',
+    'Dental clinic',
+    'Physiotherapy clinic',
+    'Walk-in clinic',
+    'Chiropractic clinic',
+    'Dermatology clinic',
+    'Mental health clinic',
+    'Specialist practice',
+    'Other',
+  ]
+
+  const customerTypeOptions = [
+    'Clinic owner',
+    'Office manager',
+    'Administrator',
+    'Clinician',
+    'Operations lead',
+    'Other',
+  ]
+
+  const businessSizeOptions = [
+    'Solo practice',
+    '2-5 staff',
+    '6-15 staff',
+    '16-50 staff',
+    '50+ staff',
+  ]
+
+  const frequencyOptions = [
+    'Daily',
+    'Several times a week',
+    'Weekly',
+    'A few times a month',
+    'Occasionally',
+  ]
+
+  const budgetOptions = [
+    'No set budget',
+    'Under $100/month',
+    '$100-$500/month',
+    '$500-$2,000/month',
+    '$2,000+/month',
+    'Prefer not to say',
+  ]
+
+  const timelineOptions = [
+    'Immediately',
+    'Within 1 month',
+    'Within 3 months',
+    'Within 6 months',
+    'Just exploring',
+  ]
+
+  const followUpOptions = [
+    'Email',
+    'Phone call',
+    'Text message',
+    'No preference',
+  ]
+
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value, type, checked } = event.target
 
     setFormData((current) => ({
       ...current,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }))
+  }
+
+  const handleBlur = (event) => {
+    const { name } = event.target
+
+    setTouched((current) => ({
+      ...current,
+      [name]: true,
+    }))
+  }
+
+  const getStepErrors = (step) => {
+    const errors = {}
+
+    if (step === 1) {
+      if (!formData.fullName.trim()) errors.fullName = 'Full name is required.'
+      if (!formData.email.trim()) errors.email = 'Email is required.'
+      if (!formData.industry.trim()) errors.industry = 'Industry is required.'
+      if (!formData.role.trim()) errors.role = 'Role / job title is required.'
+    }
+
+    if (step === 2) {
+      if (!formData.customerType.trim()) errors.customerType = 'Customer type is required.'
+      if (!formData.businessSize.trim()) errors.businessSize = 'Business size is required.'
+      if (!formData.painPoint.trim()) errors.painPoint = 'Main problem or pain point is required.'
+      if (!formData.currentSolution.trim()) errors.currentSolution = 'Current solution is required.'
+      if (!formData.frequency.trim()) errors.frequency = 'Frequency is required.'
+    }
+
+    if (step === 3) {
+      if (!formData.budgetExpectation.trim()) {
+        errors.budgetExpectation = 'Budget expectation is required.'
+      }
+      if (!formData.timeline.trim()) errors.timeline = 'Timeline is required.'
+      if (!formData.preferredFollowUp.trim()) {
+        errors.preferredFollowUp = 'Preferred follow-up is required.'
+      }
+      if (!formData.consent) errors.consent = 'Consent is required.'
+    }
+
+    return errors
+  }
+
+  const currentErrors = useMemo(() => getStepErrors(currentStep), [formData, currentStep])
+  const isCurrentStepValid = Object.keys(currentErrors).length === 0
+
+  const shouldShowFieldError = (field) => {
+    return Boolean(currentErrors[field] && (touched[field] || attemptedStepAdvance))
+  }
+
+  const goNext = () => {
+    const errors = getStepErrors(currentStep)
+
+    if (Object.keys(errors).length > 0) {
+      setAttemptedStepAdvance(true)
+      return
+    }
+
+    setCurrentStep((step) => Math.min(step + 1, 3))
+    setAttemptedStepAdvance(false)
+  }
+
+  const goBack = () => {
+    setCurrentStep((step) => Math.max(step - 1, 1))
+    setAttemptedStepAdvance(false)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    const step1Errors = getStepErrors(1)
+    const step2Errors = getStepErrors(2)
+    const step3Errors = getStepErrors(3)
+
+    if (Object.keys(step1Errors).length > 0) {
+      setCurrentStep(1)
+      setAttemptedStepAdvance(true)
+      return
+    }
+
+    if (Object.keys(step2Errors).length > 0) {
+      setCurrentStep(2)
+      setAttemptedStepAdvance(true)
+      return
+    }
+
+    if (Object.keys(step3Errors).length > 0) {
+      setCurrentStep(3)
+      setAttemptedStepAdvance(true)
+      return
+    }
+
     setSubmitted(true)
   }
 
   const shellCard =
     'rounded-[28px] border border-[rgba(148,163,184,0.18)] bg-[rgba(9,18,34,0.82)] shadow-[0_24px_60px_rgba(2,8,23,0.28)]'
   const mutedCard =
-    'rounded-[20px] border border-[rgba(148,163,184,0.18)] bg-[rgba(14,25,45,0.92)]'
+    'rounded-[20px] border border-[rgba(148,163,184,0.14)] bg-[rgba(14,25,45,0.9)]'
   const primaryButton =
-    'inline-flex min-h-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 px-5 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5'
+    'inline-flex min-h-12 items-center justify-center rounded-[18px] bg-[#69a9ff] px-6 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50'
   const secondaryButton =
-    'inline-flex min-h-12 items-center justify-center rounded-full border border-[rgba(148,163,184,0.32)] px-5 text-sm font-semibold text-slate-100 transition-transform duration-200 hover:-translate-y-0.5'
+    'inline-flex min-h-12 items-center justify-center rounded-[18px] border border-[rgba(148,163,184,0.22)] px-6 text-sm font-semibold text-slate-100 transition-all duration-200 hover:-translate-y-0.5'
   const eyebrow =
-    'mb-4 text-[0.8rem] uppercase tracking-[0.16em] text-violet-400'
+    'mb-4 text-[0.8rem] uppercase tracking-[0.16em] text-sky-400'
   const sectionHeading =
     'mb-5 text-[clamp(1.8rem,2.7vw,2.5rem)] leading-[1.05] tracking-[-0.04em] text-slate-50'
   const gradientText =
@@ -89,7 +265,378 @@ function App() {
   const chip =
     'rounded-full border border-[rgba(148,163,184,0.18)] bg-[rgba(14,25,45,0.92)] px-[14px] py-[10px] text-sm text-slate-100'
   const inputClass =
-    'w-full rounded-2xl border border-[rgba(148,163,184,0.32)] bg-[rgba(8,17,31,0.9)] px-4 py-3.5 text-slate-50 outline-none transition focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[rgba(139,92,246,0.32)]'
+    'w-full rounded-2xl border border-[rgba(148,163,184,0.14)] bg-[#020b1d] px-4 py-3.5 text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-[rgba(105,169,255,0.55)] focus:outline-none'
+  const labelClass = 'grid gap-2 font-medium text-slate-50'
+  const helperClass = 'text-sm text-slate-400'
+  const errorClass = 'text-xs text-rose-400'
+  const selectClass = `${inputClass} appearance-none`
+  const textareaClass = `${inputClass} min-h-[150px] resize-y`
+
+  const renderFieldError = (field) =>
+    shouldShowFieldError(field) ? (
+      <span className={errorClass}>{currentErrors[field]}</span>
+    ) : null
+
+  const renderStepIndicator = () => (
+    <div className="mb-8 grid grid-cols-3 gap-4 max-[640px]:gap-2">
+      {steps.map((step, index) => {
+        const isActive = currentStep === step.id
+        const isComplete = currentStep > step.id
+
+        return (
+          <div className="flex items-center gap-3" key={step.id}>
+            <div
+              className={`grid h-14 w-14 shrink-0 place-items-center rounded-full border text-xl font-semibold transition-all max-[640px]:h-11 max-[640px]:w-11 max-[640px]:text-base ${
+                isActive || isComplete
+                  ? 'border-[#69a9ff] bg-[#69a9ff] text-white'
+                  : 'border-[rgba(148,163,184,0.16)] bg-transparent text-slate-400'
+              }`}
+            >
+              {step.id}
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div
+                className={`text-[1.05rem] font-medium ${
+                  isActive || isComplete ? 'text-slate-100' : 'text-slate-400'
+                }`}
+              >
+                {step.label}
+              </div>
+            </div>
+
+            {index < steps.length - 1 ? (
+              <div className="hidden h-px flex-1 bg-[rgba(148,163,184,0.14)] lg:block" />
+            ) : null}
+          </div>
+        )
+      })}
+    </div>
+  )
+
+  const renderStep1 = () => (
+    <div className="grid gap-6">
+      <div className="grid gap-6 md:grid-cols-2">
+        <label className={labelClass}>
+          <span>
+            Full name <span className="text-rose-400">*</span>
+          </span>
+          <input
+            className={inputClass}
+            type="text"
+            name="fullName"
+            placeholder="Enter your full name"
+            value={formData.fullName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {renderFieldError('fullName')}
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Email <span className="text-rose-400">*</span>
+          </span>
+          <input
+            className={inputClass}
+            type="email"
+            name="email"
+            placeholder="you@company.com"
+            value={formData.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {renderFieldError('email')}
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Phone number <span className="text-slate-500">(optional)</span>
+          </span>
+          <input
+            className={inputClass}
+            type="tel"
+            name="phone"
+            placeholder="+1 555 123 4567"
+            value={formData.phone}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Company name <span className="text-slate-500">(optional)</span>
+          </span>
+          <input
+            className={inputClass}
+            type="text"
+            name="companyName"
+            placeholder="Company or organization"
+            value={formData.companyName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Industry <span className="text-rose-400">*</span>
+          </span>
+          <select
+            className={selectClass}
+            name="industry"
+            value={formData.industry}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          >
+            <option value="">Select an option</option>
+            {industryOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {renderFieldError('industry')}
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Role / job title <span className="text-rose-400">*</span>
+          </span>
+          <input
+            className={inputClass}
+            type="text"
+            name="role"
+            placeholder="Product Manager, Founder, Analyst..."
+            value={formData.role}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {renderFieldError('role')}
+        </label>
+      </div>
+    </div>
+  )
+
+  const renderStep2 = () => (
+    <div className="grid gap-6">
+      <div className="grid gap-6 md:grid-cols-2">
+        <label className={labelClass}>
+          <span>
+            Customer type <span className="text-rose-400">*</span>
+          </span>
+          <select
+            className={selectClass}
+            name="customerType"
+            value={formData.customerType}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          >
+            <option value="">Select an option</option>
+            {customerTypeOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {renderFieldError('customerType')}
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Age range or business size <span className="text-rose-400">*</span>
+          </span>
+          <select
+            className={selectClass}
+            name="businessSize"
+            value={formData.businessSize}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          >
+            <option value="">Select an option</option>
+            {businessSizeOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {renderFieldError('businessSize')}
+        </label>
+      </div>
+
+      <label className={labelClass}>
+        <span>
+          Main problem or pain point <span className="text-rose-400">*</span>
+        </span>
+        <textarea
+          className={textareaClass}
+          name="painPoint"
+          placeholder="Describe the biggest issue you are trying to solve."
+          value={formData.painPoint}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <span className={helperClass}>The more specific, the more useful for our research.</span>
+        {renderFieldError('painPoint')}
+      </label>
+
+      <label className={labelClass}>
+        <span>
+          Current solution you use <span className="text-rose-400">*</span>
+        </span>
+        <textarea
+          className={textareaClass}
+          name="currentSolution"
+          placeholder="Spreadsheets, internal process, software tools, manual work..."
+          value={formData.currentSolution}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        {renderFieldError('currentSolution')}
+      </label>
+
+      <label className={labelClass}>
+        <span>
+          How often do you experience the problem? <span className="text-rose-400">*</span>
+        </span>
+        <select
+          className={`${selectClass} max-w-[420px]`}
+          name="frequency"
+          value={formData.frequency}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        >
+          <option value="">Select an option</option>
+          {frequencyOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        {renderFieldError('frequency')}
+      </label>
+    </div>
+  )
+
+  const renderStep3 = () => (
+    <div className="grid gap-6">
+      <div className="grid gap-6 md:grid-cols-2">
+        <label className={labelClass}>
+          <span>
+            Budget expectations <span className="text-rose-400">*</span>
+          </span>
+          <select
+            className={selectClass}
+            name="budgetExpectation"
+            value={formData.budgetExpectation}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          >
+            <option value="">Select an option</option>
+            {budgetOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {renderFieldError('budgetExpectation')}
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Timeline <span className="text-rose-400">*</span>
+          </span>
+          <select
+            className={selectClass}
+            name="timeline"
+            value={formData.timeline}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          >
+            <option value="">Select an option</option>
+            {timelineOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {renderFieldError('timeline')}
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Preferred follow-up channel <span className="text-rose-400">*</span>
+          </span>
+          <select
+            className={selectClass}
+            name="preferredFollowUp"
+            value={formData.preferredFollowUp}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          >
+            <option value="">Select an option</option>
+            {followUpOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {renderFieldError('preferredFollowUp')}
+        </label>
+
+        <label className={labelClass}>
+          <span>
+            Location <span className="text-slate-500">(optional)</span>
+          </span>
+          <input
+            className={inputClass}
+            type="text"
+            name="location"
+            placeholder="City, region, or service area"
+            value={formData.location}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        </label>
+      </div>
+
+      <label className={labelClass}>
+        <span>
+          Additional notes <span className="text-slate-500">(optional)</span>
+        </span>
+        <textarea
+          className={textareaClass}
+          name="additionalNotes"
+          placeholder="Anything else that would help us understand your workflow, constraints, or preferred timing."
+          value={formData.additionalNotes}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+      </label>
+
+      <label className="flex items-start gap-3 rounded-2xl border border-[rgba(148,163,184,0.14)] bg-[rgba(8,17,31,0.5)] p-4 text-slate-200">
+        <input
+          className="mt-1 h-4 w-4 accent-[#69a9ff]"
+          type="checkbox"
+          name="consent"
+          checked={formData.consent}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <span className="text-sm leading-6">
+          I consent to being contacted for a brief follow-up conversation regarding this research intake.
+        </span>
+      </label>
+      {renderFieldError('consent')}
+    </div>
+  )
+
+  const renderCurrentStep = () => {
+    if (currentStep === 1) return renderStep1()
+    if (currentStep === 2) return renderStep2()
+    return renderStep3()
+  }
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-[1180px] px-8 pb-8 pt-6 max-[960px]:px-5 max-[960px]:pt-5">
@@ -98,9 +645,7 @@ function App() {
           className="inline-flex items-center gap-3 text-slate-50 no-underline"
           href="#hero"
         >
-          <span
-            className={`grid h-10 w-10 place-items-center rounded-[14px] bg-[linear-gradient(135deg,#8b5cf6_0%,#7c3aed_28%,#06b6d4_62%,#38bdf8_100%)] text-base font-bold text-white shadow-[0_16px_40px_rgba(99,102,241,0.35)] [animation:verex-hue_2.8s_linear_infinite] [will-change:filter]`}
-          >
+          <span className="grid h-10 w-10 place-items-center rounded-[14px] bg-[linear-gradient(135deg,#8b5cf6_0%,#7c3aed_28%,#06b6d4_62%,#38bdf8_100%)] text-base font-bold text-white shadow-[0_16px_40px_rgba(99,102,241,0.35)] [animation:verex-hue_2.8s_linear_infinite] [will-change:filter]">
             V
           </span>
           <span className={`text-lg font-bold tracking-[-0.03em] ${gradientText}`}>
@@ -108,7 +653,10 @@ function App() {
           </span>
         </a>
         <nav className="flex flex-wrap gap-5 max-[640px]:gap-3.5">
-          <a className="text-slate-400 no-underline transition-colors hover:text-slate-100" href="#scope">
+          <a
+            className="text-slate-400 no-underline transition-colors hover:text-slate-100"
+            href="#scope"
+          >
             Scope
           </a>
           <a
@@ -123,7 +671,10 @@ function App() {
           >
             Outcomes
           </a>
-          <a className="text-slate-400 no-underline transition-colors hover:text-slate-100" href="#contact">
+          <a
+            className="text-slate-400 no-underline transition-colors hover:text-slate-100"
+            href="#contact"
+          >
             Contact
           </a>
         </nav>
@@ -175,7 +726,8 @@ function App() {
               <div className={`${mutedCard} p-4`}>
                 <strong className="mb-2 block text-slate-50">Examples of useful input</strong>
                 <p className="text-sm leading-6 text-slate-400">
-                  Scheduling friction, billing issues, staffing strain, follow-up gaps, intake delays, or manual workflows.
+                  Scheduling friction, billing issues, staffing strain, follow-up gaps,
+                  intake delays, or manual workflows.
                 </p>
               </div>
               <div className={`${mutedCard} p-4`}>
@@ -219,7 +771,9 @@ function App() {
         <section className="mb-7" id="vision">
           <div className="mb-5">
             <p className={eyebrow}>Research focus</p>
-            <h2 className={sectionHeading}>What the outreach is intended to uncover across clinics.</h2>
+            <h2 className={sectionHeading}>
+              What the outreach is intended to uncover across clinics.
+            </h2>
           </div>
 
           <div className="grid gap-[18px] md:grid-cols-3">
@@ -235,7 +789,9 @@ function App() {
         <section className="mb-7" id="questions">
           <div className="mb-5">
             <p className={eyebrow}>Core questions</p>
-            <h2 className={sectionHeading}>Each interaction is anchored by two concise questions.</h2>
+            <h2 className={sectionHeading}>
+              Each interaction is anchored by two concise questions.
+            </h2>
           </div>
 
           <div className="grid gap-[18px] md:grid-cols-2">
@@ -254,7 +810,8 @@ function App() {
           <div className="mb-5">
             <p className={eyebrow}>Additional signals</p>
             <h2 className={sectionHeading}>
-              In addition to the primary questions, the research captures supporting context.
+              In addition to the primary questions, the research captures supporting
+              context.
             </h2>
           </div>
 
@@ -312,110 +869,79 @@ function App() {
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <h3 className="mb-2.5 text-[1.2rem] text-slate-50">{outcome.title}</h3>
-                <p className="max-w-[34ch] text-sm leading-6 text-slate-400">{outcome.description}</p>
+                <p className="max-w-[34ch] text-sm leading-6 text-slate-400">
+                  {outcome.description}
+                </p>
               </article>
             ))}
           </div>
         </section>
 
         <section
-          className="grid gap-[22px] max-[960px]:grid-cols-1 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]"
+          className="grid gap-[22px] max-[960px]:grid-cols-1 lg:grid-cols-[minmax(320px,0.72fr)_minmax(0,1.28fr)]"
           id="contact"
         >
-          <div className="flex flex-col justify-center">
-            <p className={eyebrow}>Participation</p>
-            <h2 className={sectionHeading}>
-              Clinic operators and staff may share their contact details here if they are open to participating.
+          <div className="flex flex-col justify-start pt-1">
+            <p className={eyebrow}>Research intake</p>
+            <h2 className="mb-4 text-[clamp(2.3rem,4.3vw,4.3rem)] leading-[0.96] tracking-[-0.05em] text-slate-50">
+              Share your experience
             </h2>
-            <p className="max-w-[60ch] text-base text-slate-400">
-              This is an optional way for clinic owners, office managers, administrators,
-              and staff to indicate that they may be open to a brief conversation about
-              operational challenges within their clinic.
+            <p className="max-w-[22ch] text-[1.05rem] leading-8 text-slate-300 max-[960px]:max-w-[60ch]">
+              Help us understand your workflow, pain points, and decision criteria. The
+              form is brief, structured, and designed to make your input actionable.
             </p>
-            <div className={`${shellCard} mt-6 rounded-[20px] p-5`}>
-              <strong className="mb-3 inline-block text-slate-50">Submission note</strong>
-              <p className="text-sm leading-6 text-slate-400">
-                The form below is intended to collect initial contact details and brief
-                context ahead of outreach.
-              </p>
+
+            <div className={`${mutedCard} mt-10 max-w-[620px] p-8`}>
+              <strong className="mb-6 block text-[1.2rem] text-slate-50">What we ask</strong>
+              <ul className="grid gap-5 text-slate-300">
+                <li>• Your professional context and customer type</li>
+                <li>• The main problem you are facing and current workaround</li>
+                <li>• Frequency, budget expectations, and preferred follow-up channel</li>
+              </ul>
             </div>
           </div>
 
-          <form className={`${shellCard} grid gap-4 p-[26px] max-[960px]:p-6`} onSubmit={handleSubmit}>
-            <label className="grid gap-2 font-medium text-slate-50">
-              Name
-              <input
-                className={inputClass}
-                type="text"
-                name="name"
-                placeholder="Full name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </label>
+          <form className={`${shellCard} p-[34px] max-[960px]:p-6`} onSubmit={handleSubmit}>
+            {renderStepIndicator()}
 
-            <label className="grid gap-2 font-medium text-slate-50">
-              Email
-              <input
-                className={inputClass}
-                type="email"
-                name="email"
-                placeholder="name@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </label>
+            <div className="min-h-[460px]">{renderCurrentStep()}</div>
 
-            <label className="grid gap-2 font-medium text-slate-50">
-              Clinic
-              <input
-                className={inputClass}
-                type="text"
-                name="clinic"
-                placeholder="Clinic or practice name"
-                value={formData.clinic}
-                onChange={handleChange}
-              />
-            </label>
+            <div className="mt-8 border-t border-[rgba(148,163,184,0.12)] pt-8">
+              <div className="flex items-center justify-between gap-4 max-[640px]:flex-col max-[640px]:items-stretch">
+                <div className="text-[1.05rem] text-slate-400">Step {currentStep} of 3</div>
 
-            <label className="grid gap-2 font-medium text-slate-50">
-              Role
-              <input
-                className={inputClass}
-                type="text"
-                name="role"
-                placeholder="Owner, manager, administrator, clinician"
-                value={formData.role}
-                onChange={handleChange}
-              />
-            </label>
+                <div className="flex items-center gap-3 max-[640px]:flex-col max-[640px]:items-stretch">
+                  {currentStep > 1 ? (
+                    <button className={secondaryButton} type="button" onClick={goBack}>
+                      Back
+                    </button>
+                  ) : null}
 
-            <label className="grid gap-2 font-medium text-slate-50">
-              Additional context
-              <textarea
-                className={inputClass}
-                name="note"
-                rows="5"
-                placeholder="Preferred timing, clinic type, or any context that may be useful before outreach"
-                value={formData.note}
-                onChange={handleChange}
-              />
-            </label>
+                  {currentStep < 3 ? (
+                    <button
+                      className={primaryButton}
+                      type="button"
+                      onClick={goNext}
+                    >
+                      Continue
+                    </button>
+                  ) : (
+                    <button className={primaryButton} type="submit">
+                      Submit
+                    </button>
+                  )}
+                </div>
+              </div>
 
-            <button className={`${primaryButton} mt-1.5 w-full`} type="submit">
-              Submit details
-            </button>
-
-            <p
-              aria-live="polite"
-              className={`min-h-6 text-sm ${submitted ? 'text-green-400' : 'text-slate-400'}`}
-            >
-              {submitted
-                ? 'Thank you. Your details have been noted in this preview experience.'
-                : 'Use this form to provide contact details and a brief description of the issue.'}
-            </p>
+              <p
+                aria-live="polite"
+                className={`mt-4 min-h-6 text-sm ${submitted ? 'text-green-400' : 'text-slate-400'}`}
+              >
+                {submitted
+                  ? 'Thank you. Your details have been noted in this preview experience.'
+                  : 'Complete each step to provide structured context for the research intake.'}
+              </p>
+            </div>
           </form>
         </section>
       </main>
