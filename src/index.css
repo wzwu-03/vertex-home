@@ -64,15 +64,15 @@ p {
 }
 
 h1 {
-  font-size: clamp(3rem, 6vw, 5.4rem);
+  font-size: clamp(2.6rem, 5.2vw, 4.7rem);
   line-height: 0.96;
   letter-spacing: -0.06em;
   color: var(--text-h);
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 h2 {
-  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-size: clamp(1.8rem, 2.7vw, 2.5rem);
   line-height: 1.05;
   letter-spacing: -0.04em;
   color: var(--text-h);
