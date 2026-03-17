@@ -5,33 +5,65 @@ function App() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    company: '',
-    goal: '',
+    clinic: '',
+    role: '',
+    note: '',
   })
   const [submitted, setSubmitted] = useState(false)
 
-  const highlights = [
+  const focusAreas = [
     {
-      title: 'Form-first infrastructure',
+      title: 'Revenue drivers',
       description:
-        'Start with a sharp landing page today, then grow into a reliable submission flow without rebuilding the front end.',
+        'Identify the primary sources of revenue across private clinics, including service mix, patient demand, and recurring business patterns.',
     },
     {
-      title: 'Supabase-ready workflow',
+      title: 'Operational friction',
       description:
-        'The form area is structured for a future Supabase table, auth rules, and automated follow-ups when you are ready.',
+        'Document the operational and administrative issues that most consistently create strain for clinic teams.',
     },
     {
-      title: 'Built to convert',
+      title: 'Manual inefficiencies',
       description:
-        'Every section is designed to explain the value quickly, build trust, and push visitors toward a clear next action.',
+        'Assess where clinics are losing time, margin, or efficiency because key processes remain manual, fragmented, or difficult to manage.',
     },
   ]
 
-  const steps = [
-    'Visitors discover Verex and understand the value in seconds.',
-    'They submit an interest or intake form through a focused CTA section.',
-    'Supabase can later store, validate, and route those entries into your backend workflows.',
+  const coreQuestions = [
+    'What is currently driving most of your revenue?',
+    'What is the most frustrating operational issue you deal with?',
+  ]
+
+  const researchSignals = [
+    'Whether the issue is frequent or occasional',
+    'Whether the impact is on revenue, time, or both',
+    'Whether the clinic has already tried to solve it',
+    'How open the clinic is to new tools or process changes',
+  ]
+
+  const outcomes = [
+    {
+      title: 'Structured dataset',
+      description:
+        'A structured body of clinic-level observations that can be stored, analyzed, and compared systematically.',
+    },
+    {
+      title: 'Pattern recognition',
+      description:
+        'Clear patterns across revenue drivers, operational bottlenecks, and recurring sources of administrative inefficiency.',
+    },
+    {
+      title: 'Validated problem spaces',
+      description:
+        'A prioritized set of validated problem areas that may warrant future operational or technological solutions.',
+    },
+  ]
+
+  const principles = [
+    'Independent and neutral',
+    'Explicitly non-commercial',
+    'Respectful of limited time',
+    'Grounded in operational reality',
   ]
 
   const handleChange = (event) => {
@@ -53,85 +85,92 @@ function App() {
       <header className="topbar">
         <a className="brand" href="#hero">
           <span className="brand-mark">V</span>
-          Verex
+          <span className="brand-name">Verex</span>
         </a>
         <nav className="nav">
-          <a href="#vision">Vision</a>
-          <a href="#roadmap">Roadmap</a>
-          <a href="#waitlist">Waitlist</a>
+          <a href="#scope">Scope</a>
+          <a href="#questions">Questions</a>
+          <a href="#outcomes">Outcomes</a>
+          <a href="#contact">Contact</a>
         </nav>
       </header>
 
       <main>
         <section className="hero-section" id="hero">
           <div className="hero-copy">
-            <p className="eyebrow">React landing page with a Supabase-ready future</p>
-            <h1>Verex turns interest into structured, scalable form workflows.</h1>
+            <p className="eyebrow">Independent research on private healthcare clinic operations</p>
+            <h1>
+              <span className="hero-accent">Verex</span> is studying how private clinics
+              in Ontario actually operate.
+            </h1>
             <p className="hero-text">
-              Launch the brand now with a modern landing page, then evolve it into a
-              clean backend submission system powered by Supabase when you are ready.
+              Over a three to four month period, the initiative is expected to speak with
+              200 to 500 clinics across Toronto and the GTA through brief, respectful
+              conversations focused on revenue drivers, operational challenges, and
+              recurring inefficiencies.
             </p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#waitlist">
-                Join the waitlist
+              <a className="button button-primary" href="#contact">
+                Indicate availability
               </a>
-              <a className="button button-secondary" href="#roadmap">
-                See the roadmap
+              <a className="button button-secondary" href="#questions">
+                Review the research questions
               </a>
             </div>
             <ul className="hero-points">
-              <li>Fast React front end</li>
-              <li>Flexible form intake UX</li>
-              <li>Future backend workflow support</li>
+              <li>Ontario focus, centered on Toronto and the GTA</li>
+              <li>200 to 500 clinics</li>
+              <li>30 to 60 second conversations</li>
             </ul>
           </div>
 
           <aside className="hero-panel">
-            <p className="panel-label">Planned stack</p>
-            <h2>Built for the next phase, not just the launch.</h2>
-            <div className="stack-list">
+            <p className="panel-label">Operational issue intake</p>
+            <h2>Share a recurring clinic challenge.</h2>
+            <p className="hero-panel-text">
+              If your clinic is dealing with a persistent administrative or operational
+              issue, you can provide a short summary here. Submissions help identify
+              patterns across clinics and highlight areas that warrant deeper research.
+            </p>
+            <div className="stack-list hero-intake-list">
               <div>
-                <span>01</span>
-                <strong>React landing page</strong>
-                <p>Clear product story, strong CTA, and responsive layout.</p>
+                <strong>Examples of useful input</strong>
+                <p>Scheduling friction, billing issues, staffing strain, follow-up gaps, intake delays, or manual workflows.</p>
               </div>
               <div>
-                <span>02</span>
-                <strong>Supabase submissions</strong>
-                <p>Persist leads, intake forms, or onboarding requests in one place.</p>
-              </div>
-              <div>
-                <span>03</span>
-                <strong>Automated follow-up</strong>
-                <p>Route data into email, dashboards, or internal review flows.</p>
+                <strong>Time required</strong>
+                <p>The form is designed to be brief and can be completed in under a minute.</p>
               </div>
             </div>
+            <a className="button button-primary hero-panel-button" href="#contact">
+              Start the form
+            </a>
           </aside>
         </section>
 
-        <section className="stats-strip" aria-label="Verex value points">
+        <section className="stats-strip" aria-label="Verex research summary" id="scope">
           <div>
-            <strong>1 landing page</strong>
-            <span>to define the brand and collect demand</span>
+            <strong>Bottom-up research</strong>
+            <span>grounded in operator experience rather than assumptions</span>
           </div>
           <div>
-            <strong>1 future backend</strong>
-            <span>for structured Supabase-powered form handling</span>
+            <strong>No product exists</strong>
+            <span>this is discovery work rather than a sales process</span>
           </div>
           <div>
-            <strong>End-to-end clarity</strong>
-            <span>from first click to stored submission</span>
+            <strong>Brief conversations</strong>
+            <span>structured to remain respectful, neutral, and efficient</span>
           </div>
         </section>
 
         <section className="content-section" id="vision">
           <div className="section-heading">
-            <p className="eyebrow">Why Verex</p>
-            <h2>Designed to launch quickly and grow into a real product system.</h2>
+            <p className="eyebrow">Research focus</p>
+            <h2>What the outreach is intended to uncover across clinics.</h2>
           </div>
 
           <div className="feature-grid">
-            {highlights.map((item) => (
+            {focusAreas.map((item) => (
               <article className="feature-card" key={item.title}>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
@@ -140,40 +179,88 @@ function App() {
           </div>
         </section>
 
-        <section className="roadmap-section" id="roadmap">
+        <section className="content-section" id="questions">
           <div className="section-heading">
-            <p className="eyebrow">Roadmap</p>
-            <h2>How the landing page can evolve into your backend form system.</h2>
+            <p className="eyebrow">Core questions</p>
+            <h2>Each interaction is anchored by two concise questions.</h2>
           </div>
 
-          <div className="roadmap-grid">
-            {steps.map((step, index) => (
-              <article className="roadmap-card" key={step}>
+          <div className="roadmap-grid question-grid">
+            {coreQuestions.map((question, index) => (
+              <article className="roadmap-card question-card" key={question}>
                 <span>{String(index + 1).padStart(2, '0')}</span>
-                <p>{step}</p>
+                <p>{question}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="cta-banner">
-          <p>Verex is positioned to start simple now and scale into a real submission pipeline later.</p>
+        <section className="content-section">
+          <div className="section-heading">
+            <p className="eyebrow">Additional signals</p>
+            <h2>In addition to the primary questions, the research captures supporting context.</h2>
+          </div>
+
+          <div className="signal-card">
+            <ul className="signal-list">
+              {researchSignals.map((signal) => (
+                <li key={signal}>{signal}</li>
+              ))}
+            </ul>
+          </div>
         </section>
 
-        <section className="contact-section" id="waitlist">
+        <section className="cta-banner">
+          <p>
+            The objective is to collect structured operational insight, identify recurring
+            sources of friction, and determine which problem areas merit deeper analysis.
+          </p>
+        </section>
+
+        <section className="roadmap-section" id="outcomes">
           <div className="contact-copy">
-            <p className="eyebrow">Early access</p>
-            <h2>Collect interest today. Connect storage and automation next.</h2>
+            <p className="eyebrow">Expected outcome</p>
+            <h2>What this initiative is designed to produce if the patterns are consistent.</h2>
             <p>
-              This form currently works as a front-end experience and is ready to be
-              connected to Supabase in the next iteration for persistence, validation,
-              and backend workflows.
+              The research is intended to produce a structured view of how clinics
+              generate revenue, where efficiency is lost, and which operational issues
+              recur frequently enough to justify focused attention.
+            </p>
+            <div className="integration-note principle-card">
+              <strong>Tone and posture</strong>
+              <ul className="principle-list">
+                {principles.map((principle) => (
+                  <li key={principle}>{principle}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="roadmap-grid outcome-grid">
+            {outcomes.map((outcome, index) => (
+              <article className="roadmap-card" key={outcome.title}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <h3>{outcome.title}</h3>
+                <p>{outcome.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="contact-section" id="contact">
+          <div className="contact-copy">
+            <p className="eyebrow">Participation</p>
+            <h2>Clinic operators and staff may share their contact details here if they are open to participating.</h2>
+            <p>
+              This is an optional way for clinic owners, office managers, administrators,
+              and staff to indicate that they may be open to a brief conversation. It is
+              not a product signup, and no service is being sold.
             </p>
             <div className="integration-note">
-              <strong>Future Supabase path</strong>
+              <strong>Future data infrastructure</strong>
               <p>
-                Add a table for submissions, connect the form action, and secure access
-                with row-level policies when you are ready for live data.
+                This form can later be connected to Supabase so participation interest,
+                research notes, and clinic responses can be stored in a structured dataset.
               </p>
             </div>
           </div>
@@ -184,7 +271,7 @@ function App() {
               <input
                 type="text"
                 name="name"
-                placeholder="Your name"
+                placeholder="Full name"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -196,7 +283,7 @@ function App() {
               <input
                 type="email"
                 name="email"
-                placeholder="you@example.com"
+                placeholder="name@example.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -204,35 +291,46 @@ function App() {
             </label>
 
             <label>
-              Company
+              Clinic
               <input
                 type="text"
-                name="company"
-                placeholder="Your company or project"
-                value={formData.company}
+                name="clinic"
+                placeholder="Clinic or practice name"
+                value={formData.clinic}
                 onChange={handleChange}
               />
             </label>
 
             <label>
-              What do you want Verex to help with?
+              Role
+              <input
+                type="text"
+                name="role"
+                placeholder="Owner, manager, administrator, clinician"
+                value={formData.role}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              Additional context
               <textarea
-                name="goal"
+                name="note"
                 rows="5"
-                placeholder="Lead capture, onboarding forms, requests, internal workflows..."
-                value={formData.goal}
+                placeholder="Preferred timing, clinic type, or any context that may be useful before outreach"
+                value={formData.note}
                 onChange={handleChange}
               />
             </label>
 
             <button className="button button-primary form-submit" type="submit">
-              Submit interest
+              Submit details
             </button>
 
             <p className={`form-status ${submitted ? 'is-visible' : ''}`} aria-live="polite">
               {submitted
-                ? 'Thanks. This demo form is ready for a future Supabase connection.'
-                : 'No backend is connected yet. This is the front-end experience for now.'}
+                ? 'Thank you. This form is currently front-end only and is prepared for a future Supabase connection.'
+                : 'This form is currently front-end only. No backend database is connected at this stage.'}
             </p>
           </form>
         </section>

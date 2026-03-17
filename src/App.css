@@ -1,5 +1,5 @@
 .page-shell {
-  padding: 32px;
+  padding: 24px 32px 32px;
 }
 
 .topbar {
@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 56px;
+  margin-bottom: 36px;
 }
 
 .brand {
@@ -20,15 +20,35 @@
   letter-spacing: -0.03em;
 }
 
+.brand-name,
+.hero-accent {
+  background: linear-gradient(
+    120deg,
+    #8b5cf6 0%,
+    #7c3aed 28%,
+    #06b6d4 62%,
+    #38bdf8 100%
+  );
+  display: inline-block;
+  background-size: 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: verex-hue 2.8s linear infinite;
+  will-change: filter;
+}
+
 .brand-mark {
   width: 40px;
   height: 40px;
   display: grid;
   place-items: center;
   border-radius: 14px;
-  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 28%, #06b6d4 62%, #38bdf8 100%);
   color: white;
   box-shadow: 0 16px 40px rgba(99, 102, 241, 0.35);
+  animation: verex-hue 2.8s linear infinite;
+  will-change: filter;
 }
 
 .nav {
@@ -51,12 +71,12 @@
 .contact-section {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-  gap: 28px;
+  gap: 22px;
   align-items: stretch;
 }
 
 .hero-section {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .hero-copy,
@@ -77,7 +97,7 @@
 .contact-copy,
 .contact-form {
   border-radius: 28px;
-  padding: 32px;
+  padding: 26px;
 }
 
 .eyebrow,
@@ -98,7 +118,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin: 32px 0 24px;
+  margin: 24px 0 18px;
 }
 
 .button {
@@ -156,17 +176,30 @@
     var(--surface);
 }
 
+.hero-panel-text {
+  margin-top: 8px;
+  margin-bottom: 18px;
+}
+
 .stack-list {
   display: grid;
-  gap: 18px;
-  margin-top: 24px;
+  gap: 14px;
+  margin-top: 18px;
 }
 
 .stack-list div {
-  padding: 18px;
+  padding: 16px;
   border-radius: 20px;
   background: var(--surface-muted);
   border: 1px solid var(--border);
+}
+
+.hero-intake-list {
+  margin-bottom: 18px;
+}
+
+.hero-panel-button {
+  width: 100%;
 }
 
 .stack-list span,
@@ -228,6 +261,45 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.question-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.question-card p,
+.roadmap-card p {
+  max-width: 34ch;
+}
+
+.signal-card {
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+.signal-list,
+.principle-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.signal-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.signal-list li,
+.principle-list li {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-muted);
+  color: var(--text-h);
+  padding: 16px 18px;
+}
+
 .cta-banner {
   margin-bottom: 28px;
   text-align: center;
@@ -246,6 +318,15 @@
   margin-top: 24px;
   border-radius: 20px;
   padding: 20px;
+}
+
+.principle-card strong {
+  display: inline-block;
+  margin-bottom: 14px;
+}
+
+.outcome-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .contact-form {
@@ -303,7 +384,10 @@
   .contact-section,
   .feature-grid,
   .roadmap-grid,
-  .stats-strip {
+  .stats-strip,
+  .signal-list,
+  .outcome-grid,
+  .question-grid {
     grid-template-columns: 1fr;
   }
 
@@ -330,5 +414,19 @@
 
   .button {
     width: 100%;
+  }
+}
+
+@keyframes verex-hue {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  50% {
+    filter: hue-rotate(42deg);
+  }
+
+  100% {
+    filter: hue-rotate(0deg);
   }
 }
