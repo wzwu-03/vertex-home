@@ -168,36 +168,31 @@ function App() {
     const errors = {}
 
     if (step === 1) {
-      if (!formData.fullName.trim()) errors.fullName = 'Full name is required.'
-      if (!formData.email.trim()) errors.email = 'Email is required.'
-      if (!formData.industry.trim()) errors.industry = 'Industry is required.'
-      if (!formData.role.trim()) errors.role = 'Role / job title is required.'
+      if (!formData.fullName.trim()) errors.fullName = true
+      if (!formData.email.trim()) errors.email = true
+      if (!formData.industry.trim()) errors.industry = true
+      if (!formData.role.trim()) errors.role = true
     }
 
     if (step === 2) {
-      if (!formData.customerType.trim()) errors.customerType = 'Customer type is required.'
-      if (!formData.businessSize.trim()) errors.businessSize = 'Business size is required.'
-      if (!formData.painPoint.trim()) errors.painPoint = 'Main problem or pain point is required.'
-      if (!formData.currentSolution.trim()) errors.currentSolution = 'Current solution is required.'
-      if (!formData.frequency.trim()) errors.frequency = 'Frequency is required.'
+      if (!formData.customerType.trim()) errors.customerType = true
+      if (!formData.businessSize.trim()) errors.businessSize = true
+      if (!formData.painPoint.trim()) errors.painPoint = true
+      if (!formData.currentSolution.trim()) errors.currentSolution = true
+      if (!formData.frequency.trim()) errors.frequency = true
     }
 
     if (step === 3) {
-      if (!formData.budgetExpectation.trim()) {
-        errors.budgetExpectation = 'Budget expectation is required.'
-      }
-      if (!formData.timeline.trim()) errors.timeline = 'Timeline is required.'
-      if (!formData.preferredFollowUp.trim()) {
-        errors.preferredFollowUp = 'Preferred follow-up is required.'
-      }
-      if (!formData.consent) errors.consent = 'Consent is required.'
+      if (!formData.budgetExpectation.trim()) errors.budgetExpectation = true
+      if (!formData.timeline.trim()) errors.timeline = true
+      if (!formData.preferredFollowUp.trim()) errors.preferredFollowUp = true
+      if (!formData.consent) errors.consent = true
     }
 
     return errors
   }
 
   const currentErrors = useMemo(() => getStepErrors(currentStep), [formData, currentStep])
-  const isCurrentStepValid = Object.keys(currentErrors).length === 0
 
   const shouldShowFieldError = (field) => {
     return Boolean(currentErrors[field] && (touched[field] || attemptedStepAdvance))
@@ -266,16 +261,14 @@ function App() {
     'rounded-full border border-[rgba(148,163,184,0.18)] bg-[rgba(14,25,45,0.92)] px-[14px] py-[10px] text-sm text-slate-100'
   const inputClass =
     'w-full rounded-2xl border border-[rgba(148,163,184,0.14)] bg-[#020b1d] px-4 py-3.5 text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-[rgba(105,169,255,0.55)] focus:outline-none'
+  const inputErrorClass = 'border-rose-500 focus:border-rose-500'
   const labelClass = 'grid gap-2 font-medium text-slate-50'
   const helperClass = 'text-sm text-slate-400'
-  const errorClass = 'text-xs text-rose-400'
   const selectClass = `${inputClass} appearance-none`
   const textareaClass = `${inputClass} min-h-[150px] resize-y`
 
-  const renderFieldError = (field) =>
-    shouldShowFieldError(field) ? (
-      <span className={errorClass}>{currentErrors[field]}</span>
-    ) : null
+  const getFieldClassName = (field, baseClass = inputClass) =>
+    shouldShowFieldError(field) ? `${baseClass} ${inputErrorClass}` : baseClass
 
   const renderStepIndicator = () => (
     <div className="mb-8 grid grid-cols-3 gap-4 max-[640px]:gap-2">
@@ -322,7 +315,7 @@ function App() {
             Full name <span className="text-rose-400">*</span>
           </span>
           <input
-            className={inputClass}
+            className={getFieldClassName('fullName')}
             type="text"
             name="fullName"
             placeholder="Enter your full name"
@@ -330,7 +323,6 @@ function App() {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {renderFieldError('fullName')}
         </label>
 
         <label className={labelClass}>
@@ -338,7 +330,7 @@ function App() {
             Email <span className="text-rose-400">*</span>
           </span>
           <input
-            className={inputClass}
+            className={getFieldClassName('email')}
             type="email"
             name="email"
             placeholder="you@company.com"
@@ -346,7 +338,6 @@ function App() {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {renderFieldError('email')}
         </label>
 
         <label className={labelClass}>
@@ -384,7 +375,7 @@ function App() {
             Industry <span className="text-rose-400">*</span>
           </span>
           <select
-            className={selectClass}
+            className={getFieldClassName('industry', selectClass)}
             name="industry"
             value={formData.industry}
             onChange={handleChange}
@@ -397,7 +388,6 @@ function App() {
               </option>
             ))}
           </select>
-          {renderFieldError('industry')}
         </label>
 
         <label className={labelClass}>
@@ -405,7 +395,7 @@ function App() {
             Role / job title <span className="text-rose-400">*</span>
           </span>
           <input
-            className={inputClass}
+            className={getFieldClassName('role')}
             type="text"
             name="role"
             placeholder="Product Manager, Founder, Analyst..."
@@ -413,7 +403,6 @@ function App() {
             onChange={handleChange}
             onBlur={handleBlur}
           />
-          {renderFieldError('role')}
         </label>
       </div>
     </div>
@@ -427,7 +416,7 @@ function App() {
             Customer type <span className="text-rose-400">*</span>
           </span>
           <select
-            className={selectClass}
+            className={getFieldClassName('customerType', selectClass)}
             name="customerType"
             value={formData.customerType}
             onChange={handleChange}
@@ -440,7 +429,6 @@ function App() {
               </option>
             ))}
           </select>
-          {renderFieldError('customerType')}
         </label>
 
         <label className={labelClass}>
@@ -448,7 +436,7 @@ function App() {
             Age range or business size <span className="text-rose-400">*</span>
           </span>
           <select
-            className={selectClass}
+            className={getFieldClassName('businessSize', selectClass)}
             name="businessSize"
             value={formData.businessSize}
             onChange={handleChange}
@@ -461,7 +449,6 @@ function App() {
               </option>
             ))}
           </select>
-          {renderFieldError('businessSize')}
         </label>
       </div>
 
@@ -470,7 +457,7 @@ function App() {
           Main problem or pain point <span className="text-rose-400">*</span>
         </span>
         <textarea
-          className={textareaClass}
+          className={getFieldClassName('painPoint', textareaClass)}
           name="painPoint"
           placeholder="Describe the biggest issue you are trying to solve."
           value={formData.painPoint}
@@ -478,7 +465,6 @@ function App() {
           onBlur={handleBlur}
         />
         <span className={helperClass}>The more specific, the more useful for our research.</span>
-        {renderFieldError('painPoint')}
       </label>
 
       <label className={labelClass}>
@@ -486,14 +472,13 @@ function App() {
           Current solution you use <span className="text-rose-400">*</span>
         </span>
         <textarea
-          className={textareaClass}
+          className={getFieldClassName('currentSolution', textareaClass)}
           name="currentSolution"
           placeholder="Spreadsheets, internal process, software tools, manual work..."
           value={formData.currentSolution}
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        {renderFieldError('currentSolution')}
       </label>
 
       <label className={labelClass}>
@@ -501,7 +486,7 @@ function App() {
           How often do you experience the problem? <span className="text-rose-400">*</span>
         </span>
         <select
-          className={`${selectClass} max-w-[420px]`}
+          className={getFieldClassName('frequency', `${selectClass} max-w-[420px]`)}
           name="frequency"
           value={formData.frequency}
           onChange={handleChange}
@@ -514,7 +499,6 @@ function App() {
             </option>
           ))}
         </select>
-        {renderFieldError('frequency')}
       </label>
     </div>
   )
@@ -527,7 +511,7 @@ function App() {
             Budget expectations <span className="text-rose-400">*</span>
           </span>
           <select
-            className={selectClass}
+            className={getFieldClassName('budgetExpectation', selectClass)}
             name="budgetExpectation"
             value={formData.budgetExpectation}
             onChange={handleChange}
@@ -540,7 +524,6 @@ function App() {
               </option>
             ))}
           </select>
-          {renderFieldError('budgetExpectation')}
         </label>
 
         <label className={labelClass}>
@@ -548,7 +531,7 @@ function App() {
             Timeline <span className="text-rose-400">*</span>
           </span>
           <select
-            className={selectClass}
+            className={getFieldClassName('timeline', selectClass)}
             name="timeline"
             value={formData.timeline}
             onChange={handleChange}
@@ -561,7 +544,6 @@ function App() {
               </option>
             ))}
           </select>
-          {renderFieldError('timeline')}
         </label>
 
         <label className={labelClass}>
@@ -569,7 +551,7 @@ function App() {
             Preferred follow-up channel <span className="text-rose-400">*</span>
           </span>
           <select
-            className={selectClass}
+            className={getFieldClassName('preferredFollowUp', selectClass)}
             name="preferredFollowUp"
             value={formData.preferredFollowUp}
             onChange={handleChange}
@@ -582,7 +564,6 @@ function App() {
               </option>
             ))}
           </select>
-          {renderFieldError('preferredFollowUp')}
         </label>
 
         <label className={labelClass}>
@@ -615,7 +596,13 @@ function App() {
         />
       </label>
 
-      <label className="flex items-start gap-3 rounded-2xl border border-[rgba(148,163,184,0.14)] bg-[rgba(8,17,31,0.5)] p-4 text-slate-200">
+      <label
+        className={`flex items-start gap-3 rounded-2xl border bg-[rgba(8,17,31,0.5)] p-4 text-slate-200 ${
+          shouldShowFieldError('consent')
+            ? 'border-rose-500'
+            : 'border-[rgba(148,163,184,0.14)]'
+        }`}
+      >
         <input
           className="mt-1 h-4 w-4 accent-[#69a9ff]"
           type="checkbox"
@@ -625,10 +612,10 @@ function App() {
           onBlur={handleBlur}
         />
         <span className="text-sm leading-6">
-          I consent to being contacted for a brief follow-up conversation regarding this research intake.
+          I consent to being contacted for a brief follow-up conversation regarding this
+          research intake.
         </span>
       </label>
-      {renderFieldError('consent')}
     </div>
   )
 
@@ -918,11 +905,7 @@ function App() {
                   ) : null}
 
                   {currentStep < 3 ? (
-                    <button
-                      className={primaryButton}
-                      type="button"
-                      onClick={goNext}
-                    >
+                    <button className={primaryButton} type="button" onClick={goNext}>
                       Continue
                     </button>
                   ) : (
