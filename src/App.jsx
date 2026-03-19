@@ -342,7 +342,7 @@ function App() {
 
         <label className={labelClass}>
           <span>
-            Phone number <span className="text-[rgba(55,65,81,0.65)]">(optional)</span>
+            Phone number <span className="text-slate-500">(optional)</span>
           </span>
           <input
             className={inputClass}
@@ -357,7 +357,7 @@ function App() {
 
         <label className={labelClass}>
           <span>
-            Company name <span className="text-[rgba(55,65,81,0.65)]">(optional)</span>
+            Company name <span className="text-slate-500">(optional)</span>
           </span>
           <input
             className={inputClass}
@@ -506,7 +506,8 @@ function App() {
   const renderStep3 = () => (
     <div className="grid gap-6">
       <div className="grid gap-6 md:grid-cols-2">
-        <label className={labelClass}>
+      
+{/*         <label className={labelClass}>
           <span>
             Budget expectations <span className="text-rose-400">*</span>
           </span>
@@ -524,9 +525,9 @@ function App() {
               </option>
             ))}
           </select>
-        </label>
+        </label> */}
 
-        <label className={labelClass}>
+{/*         <label className={labelClass}>
           <span>
             Timeline <span className="text-rose-400">*</span>
           </span>
@@ -544,7 +545,7 @@ function App() {
               </option>
             ))}
           </select>
-        </label>
+        </label> */}
 
         <label className={labelClass}>
           <span>
@@ -817,9 +818,9 @@ function App() {
         </section>
 
         <section
-          className={`${shellCard} mb-7 rounded-3xl bg-[#FFFFFF] p-6 text-center`}
+          className={`${shellCard} mb-7 rounded-3xl bg-[linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08)),rgba(9,18,34,0.82)] p-6 text-center`}
         >
-          <p className="text-base text-[#374151]">
+          <p className="text-base text-[#111827]">
             The objective is to collect structured operational insight, identify recurring
             sources of friction, and determine which problem areas merit deeper analysis.
           </p>
@@ -834,14 +835,14 @@ function App() {
             <h2 className={sectionHeading}>
               What this initiative is designed to produce if the patterns are consistent.
             </h2>
-            <p className="max-w-[60ch] text-base text-[#374151]">
+            <p className="max-w-[60ch] text-base text-slate-400">
               The research is intended to produce a structured view of how clinics
               generate revenue, where efficiency is lost, and which operational issues
               recur frequently enough to justify focused attention.
             </p>
             <div className={`${shellCard} mt-6 rounded-[20px] p-5`}>
               <strong className="mb-3 inline-block text-[#111827]">Research output</strong>
-              <p className="text-sm leading-6 text-[#374151]">
+              <p className="text-sm leading-6 text-slate-400">
                 The resulting analysis is intended to highlight the most common revenue
                 drivers, administrative bottlenecks, and operational issues affecting
                 private clinics across the target market.
@@ -852,11 +853,11 @@ function App() {
           <div className="grid gap-[18px] md:grid-cols-3">
             {outcomes.map((outcome, index) => (
               <article className={`${shellCard} rounded-3xl p-6`} key={outcome.title}>
-                <span className="mb-3.5 inline-flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-[rgba(96,165,250,0.22)] font-bold text-[#2563EB]">
+                <span className="mb-3.5 inline-flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-[rgba(139,92,246,0.14)] font-bold text-violet-400">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <h3 className="mb-2.5 text-[1.2rem] text-[#111827]">{outcome.title}</h3>
-                <p className="max-w-[34ch] text-sm leading-6 text-[#374151]">
+                <p className="max-w-[34ch] text-sm leading-6 text-slate-400">
                   {outcome.description}
                 </p>
               </article>
@@ -870,17 +871,17 @@ function App() {
         >
           <div className="flex flex-col justify-start pt-1">
             <p className={eyebrow}>Research intake</p>
-            <h2 className="mb-4 text-[clamp(2.3rem,4.3vw,4.3rem)] leading-[0.96] tracking-[-0.05em] text-[#111827]">
+            <h2 className="mb-4 text-[clamp(2.3rem,4.3vw,4.3rem)] leading-[0.96] tracking-[-0.05em]text-[#111827]">
               Share your experience
             </h2>
-            <p className="max-w-[22ch] text-[1.05rem] leading-8 text-[#374151] max-[960px]:max-w-[60ch]">
+            <p className="max-w-[22ch] text-[1.05rem] leading-8 text-slate-500 max-[960px]:max-w-[60ch]">
               Help us understand your workflow, pain points, and decision criteria. The
               form is brief, structured, and designed to make your input actionable.
             </p>
 
             <div className={`${mutedCard} mt-10 max-w-[620px] p-8`}>
               <strong className="mb-6 block text-[1.2rem] text-[#111827]">What we ask</strong>
-              <ul className="grid gap-5 text-[#374151]">
+              <ul className="grid gap-5 text-slate-500">
                 <li>• Your professional context and customer type</li>
                 <li>• The main problem you are facing and current workaround</li>
                 <li>• Frequency, budget expectations, and preferred follow-up channel</li>
@@ -893,9 +894,9 @@ function App() {
 
             <div className="min-h-[460px]">{renderCurrentStep()}</div>
 
-            <div className="mt-8 border-t border-[rgba(17,24,39,0.12)] pt-8">
+            <div className="mt-8 border-t border-[rgba(148,163,184,0.12)] pt-8">
               <div className="flex items-center justify-between gap-4 max-[640px]:flex-col max-[640px]:items-stretch">
-                <div className="text-[1.05rem] text-[#374151]">Step {currentStep} of 3</div>
+                <div className="text-[1.05rem] text-slate-400">Step {currentStep} of 3</div>
 
                 <div className="flex items-center gap-3 max-[640px]:flex-col max-[640px]:items-stretch">
                   {currentStep > 1 ? (
@@ -918,7 +919,7 @@ function App() {
 
               <p
                 aria-live="polite"
-                className={`mt-4 min-h-6 text-sm ${submitted ? 'text-green-600' : 'text-[#374151]'}`}
+                className={`mt-4 min-h-6 text-sm ${submitted ? 'text-green-400' : 'text-slate-400'}`}
               >
                 {submitted
                   ? 'Thank you. Your details have been noted in this preview experience.'
