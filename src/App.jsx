@@ -244,26 +244,26 @@ function App() {
   }
 
   const shellCard =
-    'rounded-[28px] border border-[rgba(148,163,184,0.18)] bg-[rgba(9,18,34,0.82)] shadow-[0_24px_60px_rgba(2,8,23,0.28)]'
+    'rounded-[28px] border border-[rgba(17,24,39,0.12)] bg-[#F3F4F6] shadow-[0_24px_60px_rgba(17,24,39,0.10)]'
   const mutedCard =
-    'rounded-[20px] border border-[rgba(148,163,184,0.14)] bg-[rgba(14,25,45,0.9)]'
+    'rounded-[20px] border border-[rgba(17,24,39,0.10)] bg-[#FFFFFF]'
   const primaryButton =
-    'inline-flex min-h-12 items-center justify-center rounded-[18px] bg-[#69a9ff] px-6 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50'
+    'inline-flex min-h-12 items-center justify-center rounded-[18px] bg-[#2563EB] px-6 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50'
   const secondaryButton =
-    'inline-flex min-h-12 items-center justify-center rounded-[18px] border border-[rgba(148,163,184,0.22)] px-6 text-sm font-semibold text-slate-100 transition-all duration-200 hover:-translate-y-0.5'
+    'inline-flex min-h-12 items-center justify-center rounded-[18px] border border-[rgba(17,24,39,0.18)] bg-[#FFFFFF] px-6 text-sm font-semibold text-[#111827] transition-all duration-200 hover:-translate-y-0.5'
   const eyebrow =
-    'mb-4 text-[0.8rem] uppercase tracking-[0.16em] text-sky-400'
+    'mb-4 text-[0.8rem] uppercase tracking-[0.16em] text-[#2563EB]'
   const sectionHeading =
-    'mb-5 text-[clamp(1.8rem,2.7vw,2.5rem)] leading-[1.05] tracking-[-0.04em] text-slate-50'
+    'mb-5 text-[clamp(1.8rem,2.7vw,2.5rem)] leading-[1.05] tracking-[-0.04em] text-[#111827]'
   const gradientText =
-    'inline-block bg-[linear-gradient(120deg,#8b5cf6_0%,#7c3aed_28%,#06b6d4_62%,#38bdf8_100%)] bg-clip-text text-transparent [animation:verex-hue_2.8s_linear_infinite] [will-change:filter]'
+    'inline-block bg-[linear-gradient(120deg,#2563EB_0%,#60A5FA_100%)] bg-clip-text text-transparent'
   const chip =
-    'rounded-full border border-[rgba(148,163,184,0.18)] bg-[rgba(14,25,45,0.92)] px-[14px] py-[10px] text-sm text-slate-100'
+    'rounded-full border border-[rgba(17,24,39,0.14)] bg-[#FFFFFF] px-[14px] py-[10px] text-sm text-[#374151]'
   const inputClass =
-    'w-full rounded-2xl border border-[rgba(148,163,184,0.14)] bg-[#020b1d] px-4 py-3.5 text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-[rgba(105,169,255,0.55)] focus:outline-none'
+    'w-full rounded-2xl border border-[rgba(17,24,39,0.14)] bg-[#FFFFFF] px-4 py-3.5 text-[#374151] outline-none transition placeholder:text-[rgba(55,65,81,0.55)] focus:border-[#60A5FA] focus:outline-none'
   const inputErrorClass = 'border-rose-500 focus:border-rose-500'
-  const labelClass = 'grid gap-2 font-medium text-slate-50'
-  const helperClass = 'text-sm text-slate-400'
+  const labelClass = 'grid gap-2 font-medium text-[#111827]'
+  const helperClass = 'text-sm text-[rgba(55,65,81,0.85)]'
   const selectClass = `${inputClass} appearance-none`
   const textareaClass = `${inputClass} min-h-[150px] resize-y`
 
@@ -281,8 +281,8 @@ function App() {
             <div
               className={`grid h-14 w-14 shrink-0 place-items-center rounded-full border text-xl font-semibold transition-all max-[640px]:h-11 max-[640px]:w-11 max-[640px]:text-base ${
                 isActive || isComplete
-                  ? 'border-[#69a9ff] bg-[#69a9ff] text-white'
-                  : 'border-[rgba(148,163,184,0.16)] bg-transparent text-slate-400'
+                  ? 'border-[#2563EB] bg-[#2563EB] text-white'
+                  : 'border-[rgba(17,24,39,0.16)] bg-transparent text-[rgba(55,65,81,0.75)]'
               }`}
             >
               {step.id}
@@ -291,7 +291,7 @@ function App() {
             <div className="min-w-0 flex-1">
               <div
                 className={`text-[1.05rem] font-medium ${
-                  isActive || isComplete ? 'text-slate-100' : 'text-slate-400'
+                  isActive || isComplete ? 'text-[#111827]' : 'text-[rgba(55,65,81,0.75)]'
                 }`}
               >
                 {step.label}
@@ -299,7 +299,7 @@ function App() {
             </div>
 
             {index < steps.length - 1 ? (
-              <div className="hidden h-px flex-1 bg-[rgba(148,163,184,0.14)] lg:block" />
+              <div className="hidden h-px flex-1 bg-[rgba(17,24,39,0.12)] lg:block" />
             ) : null}
           </div>
         )
@@ -342,7 +342,7 @@ function App() {
 
         <label className={labelClass}>
           <span>
-            Phone number <span className="text-slate-500">(optional)</span>
+            Phone number <span className="text-[rgba(55,65,81,0.65)]">(optional)</span>
           </span>
           <input
             className={inputClass}
@@ -357,7 +357,7 @@ function App() {
 
         <label className={labelClass}>
           <span>
-            Company name <span className="text-slate-500">(optional)</span>
+            Company name <span className="text-[rgba(55,65,81,0.65)]">(optional)</span>
           </span>
           <input
             className={inputClass}
@@ -568,7 +568,7 @@ function App() {
 
         <label className={labelClass}>
           <span>
-            Location <span className="text-slate-500">(optional)</span>
+            Location <span className="text-[rgba(55,65,81,0.65)]">(optional)</span>
           </span>
           <input
             className={inputClass}
@@ -584,7 +584,7 @@ function App() {
 
       <label className={labelClass}>
         <span>
-          Additional notes <span className="text-slate-500">(optional)</span>
+          Additional notes <span className="text-[rgba(55,65,81,0.65)]">(optional)</span>
         </span>
         <textarea
           className={textareaClass}
@@ -597,14 +597,14 @@ function App() {
       </label>
 
       <label
-        className={`flex items-start gap-3 rounded-2xl border bg-[rgba(8,17,31,0.5)] p-4 text-slate-200 ${
+        className={`flex items-start gap-3 rounded-2xl border bg-[#FFFFFF] p-4 text-[#374151] ${
           shouldShowFieldError('consent')
             ? 'border-rose-500'
-            : 'border-[rgba(148,163,184,0.14)]'
+            : 'border-[rgba(17,24,39,0.12)]'
         }`}
       >
         <input
-          className="mt-1 h-4 w-4 accent-[#69a9ff]"
+          className="mt-1 h-4 w-4 accent-[#2563EB]"
           type="checkbox"
           name="consent"
           checked={formData.consent}
@@ -629,10 +629,10 @@ function App() {
     <div className="mx-auto min-h-screen w-full max-w-[1180px] px-8 pb-8 pt-6 max-[960px]:px-5 max-[960px]:pt-5">
       <header className="mb-9 flex items-center justify-between gap-6 max-[960px]:mb-8">
         <a
-          className="inline-flex items-center gap-3 text-slate-50 no-underline"
+          className="inline-flex items-center gap-3 text-[#111827] no-underline"
           href="#hero"
         >
-          <span className="grid h-10 w-10 place-items-center rounded-[14px] bg-[linear-gradient(135deg,#8b5cf6_0%,#7c3aed_28%,#06b6d4_62%,#38bdf8_100%)] text-base font-bold text-white shadow-[0_16px_40px_rgba(99,102,241,0.35)] [animation:verex-hue_2.8s_linear_infinite] [will-change:filter]">
+          <span className="grid h-10 w-10 place-items-center rounded-[14px] bg-[linear-gradient(135deg,#2563EB_0%,#60A5FA_100%)] text-base font-bold text-white shadow-[0_16px_40px_rgba(37,99,235,0.25)]">
             V
           </span>
           <span className={`text-lg font-bold tracking-[-0.03em] ${gradientText}`}>
@@ -641,25 +641,25 @@ function App() {
         </a>
         <nav className="flex flex-wrap gap-5 max-[640px]:gap-3.5">
           <a
-            className="text-slate-400 no-underline transition-colors hover:text-slate-100"
+            className="text-[#374151] no-underline transition-colors hover:text-[#111827]"
             href="#scope"
           >
             Scope
           </a>
           <a
-            className="text-slate-400 no-underline transition-colors hover:text-slate-100"
+            className="text-[#374151] no-underline transition-colors hover:text-[#111827]"
             href="#questions"
           >
             Questions
           </a>
           <a
-            className="text-slate-400 no-underline transition-colors hover:text-slate-100"
+            className="text-[#374151] no-underline transition-colors hover:text-[#111827]"
             href="#outcomes"
           >
             Outcomes
           </a>
           <a
-            className="text-slate-400 no-underline transition-colors hover:text-slate-100"
+            className="text-[#374151] no-underline transition-colors hover:text-[#111827]"
             href="#contact"
           >
             Contact
@@ -674,11 +674,11 @@ function App() {
         >
           <div className={`${shellCard} p-[26px] max-[960px]:p-6`}>
             <p className={eyebrow}>Independent research on private healthcare clinic operations</p>
-            <h1 className="mb-3.5 text-[clamp(2.6rem,5.2vw,4.7rem)] leading-[0.96] tracking-[-0.06em] text-slate-50">
+            <h1 className="mb-3.5 text-[clamp(2.6rem,5.2vw,4.7rem)] leading-[0.96] tracking-[-0.06em] text-[#111827]">
               <span className={gradientText}>Verex</span> is studying how private clinics
               in Ontario actually operate.
             </h1>
-            <p className="max-w-[60ch] text-base text-slate-400">
+            <p className="max-w-[60ch] text-base text-[#374151]">
               Over a three to four month period, the initiative is expected to speak with
               200 to 500 clinics across Toronto and the GTA through brief, respectful
               conversations focused on revenue drivers, operational challenges, and
@@ -700,26 +700,26 @@ function App() {
           </div>
 
           <aside
-            className={`${shellCard} bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.16),transparent_45%),rgba(9,18,34,0.82)] p-[26px] max-[960px]:p-6`}
+            className={`${shellCard} p-[26px] max-[960px]:p-6`}
           >
             <p className={eyebrow}>Operational issue intake</p>
             <h2 className={sectionHeading}>Share a recurring clinic challenge.</h2>
-            <p className="mb-[18px] mt-2 text-base text-slate-400">
+            <p className="mb-[18px] mt-2 text-base text-[#374151]">
               If your clinic is dealing with a persistent administrative or operational
               issue, you can provide a short summary here. Submissions help identify
               patterns across clinics and highlight areas that warrant deeper research.
             </p>
             <div className="mb-[18px] mt-[18px] grid gap-3.5">
               <div className={`${mutedCard} p-4`}>
-                <strong className="mb-2 block text-slate-50">Examples of useful input</strong>
-                <p className="text-sm leading-6 text-slate-400">
+                <strong className="mb-2 block text-[#111827]">Examples of useful input</strong>
+                <p className="text-sm leading-6 text-[#374151]">
                   Scheduling friction, billing issues, staffing strain, follow-up gaps,
                   intake delays, or manual workflows.
                 </p>
               </div>
               <div className={`${mutedCard} p-4`}>
-                <strong className="mb-2 block text-slate-50">Time required</strong>
-                <p className="text-sm leading-6 text-slate-400">
+                <strong className="mb-2 block text-[#111827]">Time required</strong>
+                <p className="text-sm leading-6 text-[#374151]">
                   The form is designed to be brief and can be completed in under a minute.
                 </p>
               </div>
@@ -736,20 +736,20 @@ function App() {
           id="scope"
         >
           <div className={`${shellCard} rounded-3xl p-6`}>
-            <strong className="mb-2.5 block text-slate-50">Ontario clinic sample</strong>
-            <span className="text-sm text-slate-400">
+            <strong className="mb-2.5 block text-[#111827]">Ontario clinic sample</strong>
+            <span className="text-sm text-[#374151]">
               focused on private healthcare operators across Toronto and the GTA
             </span>
           </div>
           <div className={`${shellCard} rounded-3xl p-6`}>
-            <strong className="mb-2.5 block text-slate-50">Short-form outreach</strong>
-            <span className="text-sm text-slate-400">
+            <strong className="mb-2.5 block text-[#111827]">Short-form outreach</strong>
+            <span className="text-sm text-[#374151]">
               built around concise conversations intended to gather operational insight
             </span>
           </div>
           <div className={`${shellCard} rounded-3xl p-6`}>
-            <strong className="mb-2.5 block text-slate-50">Pattern-based analysis</strong>
-            <span className="text-sm text-slate-400">
+            <strong className="mb-2.5 block text-[#111827]">Pattern-based analysis</strong>
+            <span className="text-sm text-[#374151]">
               designed to compare recurring operational issues across many clinics
             </span>
           </div>
@@ -766,8 +766,8 @@ function App() {
           <div className="grid gap-[18px] md:grid-cols-3">
             {focusAreas.map((item) => (
               <article className={`${shellCard} rounded-3xl p-6`} key={item.title}>
-                <h3 className="mb-2.5 text-[1.2rem] text-slate-50">{item.title}</h3>
-                <p className="text-sm leading-6 text-slate-400">{item.description}</p>
+                <h3 className="mb-2.5 text-[1.2rem] text-[#111827]">{item.title}</h3>
+                <p className="text-sm leading-6 text-[#374151]">{item.description}</p>
               </article>
             ))}
           </div>
@@ -784,10 +784,10 @@ function App() {
           <div className="grid gap-[18px] md:grid-cols-2">
             {coreQuestions.map((question, index) => (
               <article className={`${shellCard} rounded-3xl p-6`} key={question}>
-                <span className="mb-3.5 inline-flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-[rgba(139,92,246,0.14)] font-bold text-violet-400">
+                <span className="mb-3.5 inline-flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-[rgba(96,165,250,0.22)] font-bold text-[#2563EB]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <p className="max-w-[34ch] text-base text-slate-200">{question}</p>
+                <p className="max-w-[34ch] text-base text-[#374151]">{question}</p>
               </article>
             ))}
           </div>
@@ -806,7 +806,7 @@ function App() {
             <ul className="grid gap-3 md:grid-cols-2">
               {researchSignals.map((signal) => (
                 <li
-                  className="rounded-[18px] border border-[rgba(148,163,184,0.18)] bg-[rgba(14,25,45,0.92)] px-[18px] py-4 text-slate-100"
+                  className="rounded-[18px] border border-[rgba(17,24,39,0.12)] bg-[#FFFFFF] px-[18px] py-4 text-[#374151]"
                   key={signal}
                 >
                   {signal}
@@ -817,9 +817,9 @@ function App() {
         </section>
 
         <section
-          className={`${shellCard} mb-7 rounded-3xl bg-[linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08)),rgba(9,18,34,0.82)] p-6 text-center`}
+          className={`${shellCard} mb-7 rounded-3xl bg-[#FFFFFF] p-6 text-center`}
         >
-          <p className="text-base text-slate-300">
+          <p className="text-base text-[#374151]">
             The objective is to collect structured operational insight, identify recurring
             sources of friction, and determine which problem areas merit deeper analysis.
           </p>
@@ -834,14 +834,14 @@ function App() {
             <h2 className={sectionHeading}>
               What this initiative is designed to produce if the patterns are consistent.
             </h2>
-            <p className="max-w-[60ch] text-base text-slate-400">
+            <p className="max-w-[60ch] text-base text-[#374151]">
               The research is intended to produce a structured view of how clinics
               generate revenue, where efficiency is lost, and which operational issues
               recur frequently enough to justify focused attention.
             </p>
             <div className={`${shellCard} mt-6 rounded-[20px] p-5`}>
-              <strong className="mb-3 inline-block text-slate-50">Research output</strong>
-              <p className="text-sm leading-6 text-slate-400">
+              <strong className="mb-3 inline-block text-[#111827]">Research output</strong>
+              <p className="text-sm leading-6 text-[#374151]">
                 The resulting analysis is intended to highlight the most common revenue
                 drivers, administrative bottlenecks, and operational issues affecting
                 private clinics across the target market.
@@ -852,11 +852,11 @@ function App() {
           <div className="grid gap-[18px] md:grid-cols-3">
             {outcomes.map((outcome, index) => (
               <article className={`${shellCard} rounded-3xl p-6`} key={outcome.title}>
-                <span className="mb-3.5 inline-flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-[rgba(139,92,246,0.14)] font-bold text-violet-400">
+                <span className="mb-3.5 inline-flex h-[42px] min-w-[42px] items-center justify-center rounded-full bg-[rgba(96,165,250,0.22)] font-bold text-[#2563EB]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="mb-2.5 text-[1.2rem] text-slate-50">{outcome.title}</h3>
-                <p className="max-w-[34ch] text-sm leading-6 text-slate-400">
+                <h3 className="mb-2.5 text-[1.2rem] text-[#111827]">{outcome.title}</h3>
+                <p className="max-w-[34ch] text-sm leading-6 text-[#374151]">
                   {outcome.description}
                 </p>
               </article>
@@ -870,17 +870,17 @@ function App() {
         >
           <div className="flex flex-col justify-start pt-1">
             <p className={eyebrow}>Research intake</p>
-            <h2 className="mb-4 text-[clamp(2.3rem,4.3vw,4.3rem)] leading-[0.96] tracking-[-0.05em] text-slate-50">
+            <h2 className="mb-4 text-[clamp(2.3rem,4.3vw,4.3rem)] leading-[0.96] tracking-[-0.05em] text-[#111827]">
               Share your experience
             </h2>
-            <p className="max-w-[22ch] text-[1.05rem] leading-8 text-slate-300 max-[960px]:max-w-[60ch]">
+            <p className="max-w-[22ch] text-[1.05rem] leading-8 text-[#374151] max-[960px]:max-w-[60ch]">
               Help us understand your workflow, pain points, and decision criteria. The
               form is brief, structured, and designed to make your input actionable.
             </p>
 
             <div className={`${mutedCard} mt-10 max-w-[620px] p-8`}>
-              <strong className="mb-6 block text-[1.2rem] text-slate-50">What we ask</strong>
-              <ul className="grid gap-5 text-slate-300">
+              <strong className="mb-6 block text-[1.2rem] text-[#111827]">What we ask</strong>
+              <ul className="grid gap-5 text-[#374151]">
                 <li>• Your professional context and customer type</li>
                 <li>• The main problem you are facing and current workaround</li>
                 <li>• Frequency, budget expectations, and preferred follow-up channel</li>
@@ -893,9 +893,9 @@ function App() {
 
             <div className="min-h-[460px]">{renderCurrentStep()}</div>
 
-            <div className="mt-8 border-t border-[rgba(148,163,184,0.12)] pt-8">
+            <div className="mt-8 border-t border-[rgba(17,24,39,0.12)] pt-8">
               <div className="flex items-center justify-between gap-4 max-[640px]:flex-col max-[640px]:items-stretch">
-                <div className="text-[1.05rem] text-slate-400">Step {currentStep} of 3</div>
+                <div className="text-[1.05rem] text-[#374151]">Step {currentStep} of 3</div>
 
                 <div className="flex items-center gap-3 max-[640px]:flex-col max-[640px]:items-stretch">
                   {currentStep > 1 ? (
@@ -918,7 +918,7 @@ function App() {
 
               <p
                 aria-live="polite"
-                className={`mt-4 min-h-6 text-sm ${submitted ? 'text-green-400' : 'text-slate-400'}`}
+                className={`mt-4 min-h-6 text-sm ${submitted ? 'text-green-600' : 'text-[#374151]'}`}
               >
                 {submitted
                   ? 'Thank you. Your details have been noted in this preview experience.'
