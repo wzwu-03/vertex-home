@@ -1,4 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+const LIMITS = {
+  fullName: { min: 2, max: 120 },
+  role: { max: 100 },
+  companyName: { max: 200 },
+  painPoint: { min: 20, max: 5000 },
+  currentSolution: { min: 10, max: 5000 },
+  location: { max: 200 },
+  additionalNotes: { max: 5000 },
+}
+
+function validateEmail(value) {
+  const trimmed = value.trim()
+  if (!trimmed) return 'Email is required.'
+  if (trimmed.length > 254) return 'Email must be 254 characters or fewer.'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed)) {
+    return 'Please enter a valid email address.'
+  }
+  return ''
+}
+
+function validateOptionalPhone(value) {
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  const digits = trimmed.replace(/\D/g, '')
+  if (digits.length < 10) {
+    return 'Enter at least 10 digits for your phone number.'
+  }
+  if (digits.length > 15) {
+    return 'Phone number is too long.'
+  }
+  return ''
+}
 
 function App() {
   const [submitted, setSubmitted] = useState(false)
@@ -166,52 +199,130 @@ function App() {
     const errors = {}
 
     if (step === 1) {
-      if (!formData.fullName.trim()) errors.fullName = true
-      if (!formData.email.trim()) errors.email = true
-      if (!formData.industry.trim()) errors.industry = true
-      if (!formData.role.trim()) errors.role = true
+      const name = formData.fullName.trim()
+      if (!name) {
+        errors.fullName = 'Full name is required.'
+      } else if (name.length < LIMITS.fullName.min) {
+        errors.fullName = `Use at least ${LIMITS.fullName.min} characters.`
+      } else if (name.length > LIMITS.fullName.max) {
+        errors.fullName = `Keep your name under ${LIMITS.fullName.max} characters.`
+      }
+
+      const emailError = validateEmail(formData.email)
+      if (emailError) errors.email = emailError
+
+      const phoneError = validateOptionalPhone(formData.phone)
+      if (phoneError) errors.phone = phoneError
+
+      const company = formData.companyName.trim()
+      if (company.length > LIMITS.companyName.max) {
+        errors.companyName = `Company name must be ${LIMITS.companyName.max} characters or fewer.`
+      }
+
+      if (!formData.industry.trim()) {
+        errors.industry = 'Please select an industry.'
+      }
+
+      const role = formData.role.trim()
+      if (!role) {
+        errors.role = 'Role or job title is required.'
+      } else if (role.length > LIMITS.role.max) {
+        errors.role = `Role must be ${LIMITS.role.max} characters or fewer.`
+      }
     }
 
     if (step === 2) {
-      if (!formData.customerType.trim()) errors.customerType = true
-      if (!formData.businessSize.trim()) errors.businessSize = true
-      if (!formData.painPoint.trim()) errors.painPoint = true
-      if (!formData.currentSolution.trim()) errors.currentSolution = true
-      if (!formData.frequency.trim()) errors.frequency = true
+      if (!formData.customerType.trim()) {
+        errors.customerType = 'Please select a customer type.'
+      }
+      if (!formData.businessSize.trim()) {
+        errors.businessSize = 'Please select a business size.'
+      }
+
+      const pain = formData.painPoint.trim()
+      if (!pain) {
+        errors.painPoint = 'Please describe the main problem or pain point.'
+      } else if (pain.length < LIMITS.painPoint.min) {
+        errors.painPoint = `Add a bit more detail (at least ${LIMITS.painPoint.min} characters).`
+      } else if (pain.length > LIMITS.painPoint.max) {
+        errors.painPoint = `Keep this under ${LIMITS.painPoint.max} characters.`
+      }
+
+      const solution = formData.currentSolution.trim()
+      if (!solution) {
+        errors.currentSolution = 'Please describe your current solution or workflow.'
+      } else if (solution.length < LIMITS.currentSolution.min) {
+        errors.currentSolution = `Add more detail (at least ${LIMITS.currentSolution.min} characters).`
+      } else if (solution.length > LIMITS.currentSolution.max) {
+        errors.currentSolution = `Keep this under ${LIMITS.currentSolution.max} characters.`
+      }
+
+      if (!formData.frequency.trim()) {
+        errors.frequency = 'Please select how often you experience the problem.'
+      }
     }
 
     if (step === 3) {
-      if (!formData.preferredFollowUp.trim()) errors.preferredFollowUp = true
-      if (!formData.consent) errors.consent = true
+      if (!formData.preferredFollowUp.trim()) {
+        errors.preferredFollowUp = 'Please select a follow-up channel.'
+      }
+
+      const loc = formData.location.trim()
+      if (loc.length > LIMITS.location.max) {
+        errors.location = `Location must be ${LIMITS.location.max} characters or fewer.`
+      }
+
+      const notes = formData.additionalNotes.trim()
+      if (notes.length > LIMITS.additionalNotes.max) {
+        errors.additionalNotes = `Notes must be ${LIMITS.additionalNotes.max} characters or fewer.`
+      }
+
+      if (!formData.consent) {
+        errors.consent = 'Please confirm you consent to be contacted for follow-up.'
+      }
     }
 
     return errors
   }
 
-  const currentErrors = getStepErrors(currentStep)
+  const currentErrors = useMemo(() => getStepErrors(currentStep), [formData, currentStep])
 
   const shouldShowFieldError = (field) => {
-    if (field === 'consent') {
-      return Boolean(currentErrors[field] && (touched[field] || attemptedStepAdvance))
-    }
-
-    return Boolean(currentErrors[field] && touched[field])
+    return Boolean(currentErrors[field] && (touched[field] || attemptedStepAdvance))
   }
 
+  const markFieldsTouched = (fields) => {
+    setTouched((current) => {
+      const next = { ...current }
+      for (const key of fields) {
+        next[key] = true
+      }
+      return next
+    })
+  }
 
+  const fieldHintId = (field) => `${field}-hint`
+
+  const fieldErrorId = (field) => `${field}-error`
+
+  const describedBy = (field, hintId) => {
+    const ids = []
+    if (shouldShowFieldError(field)) ids.push(fieldErrorId(field))
+    if (hintId) ids.push(hintId)
+    return ids.length > 0 ? ids.join(' ') : undefined
+  }
 
   const goNext = () => {
     const errors = getStepErrors(currentStep)
 
     if (Object.keys(errors).length > 0) {
       setAttemptedStepAdvance(true)
+      markFieldsTouched(Object.keys(errors))
       return
     }
 
     setCurrentStep((step) => Math.min(step + 1, 3))
     setAttemptedStepAdvance(false)
-
-    
   }
 
   const goBack = () => {
@@ -229,18 +340,21 @@ function App() {
     if (Object.keys(step1Errors).length > 0) {
       setCurrentStep(1)
       setAttemptedStepAdvance(true)
+      markFieldsTouched(Object.keys(step1Errors))
       return
     }
 
     if (Object.keys(step2Errors).length > 0) {
       setCurrentStep(2)
       setAttemptedStepAdvance(true)
+      markFieldsTouched(Object.keys(step2Errors))
       return
     }
 
     if (Object.keys(step3Errors).length > 0) {
       setCurrentStep(3)
       setAttemptedStepAdvance(true)
+      markFieldsTouched(Object.keys(step3Errors))
       return
     }
 
@@ -268,11 +382,28 @@ function App() {
   const inputErrorClass = 'border-rose-500 focus:border-rose-500'
   const labelClass = 'grid gap-2 font-medium text-[var(--color-primary)]'
   const helperClass = 'text-sm text-[var(--color-text)]'
+  const errorTextClass = 'text-sm font-medium leading-snug text-rose-500'
+  /** Keeps layout stable when validation messages appear (avoids fields jumping). */
+  const fieldErrorSlotClass = 'min-h-[2.75rem]'
   const selectClass = `${inputClass} appearance-none`
   const textareaClass = `${inputClass} min-h-[150px] resize-y`
 
   const getFieldClassName = (field, baseClass = inputClass) =>
     shouldShowFieldError(field) ? `${baseClass} ${inputErrorClass}` : baseClass
+
+  const renderFieldError = (field) => {
+    const message = currentErrors[field]
+    const show = Boolean(message && shouldShowFieldError(field))
+    return (
+      <div className={fieldErrorSlotClass}>
+        {show ? (
+          <span className={errorTextClass} id={fieldErrorId(field)} role="alert">
+            {message}
+          </span>
+        ) : null}
+      </div>
+    )
+  }
 
   const renderStepIndicator = () => (
     <div className="mb-8 grid grid-cols-3 gap-4 max-[640px]:gap-2">
@@ -319,14 +450,19 @@ function App() {
             Full name <span className="text-rose-400">*</span>
           </span>
           <input
+            id="field-fullName"
+            aria-invalid={shouldShowFieldError('fullName')}
+            aria-describedby={describedBy('fullName')}
             className={getFieldClassName('fullName')}
             type="text"
             name="fullName"
             placeholder="Enter your full name"
+            autoComplete="name"
             value={formData.fullName}
             onChange={handleChange}
             onBlur={handleBlur}
           />
+          {renderFieldError('fullName')}
         </label>
 
         <label className={labelClass}>
@@ -334,14 +470,19 @@ function App() {
             Email <span className="text-rose-400">*</span>
           </span>
           <input
+            id="field-email"
+            aria-invalid={shouldShowFieldError('email')}
+            aria-describedby={describedBy('email')}
             className={getFieldClassName('email')}
             type="email"
             name="email"
             placeholder="you@company.com"
+            autoComplete="email"
             value={formData.email}
             onChange={handleChange}
             onBlur={handleBlur}
           />
+          {renderFieldError('email')}
         </label>
 
         <label className={labelClass}>
@@ -349,14 +490,19 @@ function App() {
             Phone number <span className="text-[var(--color-text)]">(optional)</span>
           </span>
           <input
-            className={inputClass}
+            id="field-phone"
+            aria-invalid={shouldShowFieldError('phone')}
+            aria-describedby={describedBy('phone')}
+            className={getFieldClassName('phone')}
             type="tel"
             name="phone"
             placeholder="+1 555 123 4567"
+            autoComplete="tel"
             value={formData.phone}
             onChange={handleChange}
             onBlur={handleBlur}
           />
+          {renderFieldError('phone')}
         </label>
 
         <label className={labelClass}>
@@ -364,14 +510,19 @@ function App() {
             Company name <span className="text-[var(--color-text)]">(optional)</span>
           </span>
           <input
-            className={inputClass}
+            id="field-companyName"
+            aria-invalid={shouldShowFieldError('companyName')}
+            aria-describedby={describedBy('companyName')}
+            className={getFieldClassName('companyName')}
             type="text"
             name="companyName"
             placeholder="Company or organization"
+            autoComplete="organization"
             value={formData.companyName}
             onChange={handleChange}
             onBlur={handleBlur}
           />
+          {renderFieldError('companyName')}
         </label>
 
         <label className={labelClass}>
@@ -379,6 +530,9 @@ function App() {
             Industry <span className="text-rose-400">*</span>
           </span>
           <select
+            id="field-industry"
+            aria-invalid={shouldShowFieldError('industry')}
+            aria-describedby={describedBy('industry')}
             className={getFieldClassName('industry', selectClass)}
             name="industry"
             value={formData.industry}
@@ -392,6 +546,7 @@ function App() {
               </option>
             ))}
           </select>
+          {renderFieldError('industry')}
         </label>
 
         <label className={labelClass}>
@@ -399,14 +554,19 @@ function App() {
             Role / job title <span className="text-rose-400">*</span>
           </span>
           <input
+            id="field-role"
+            aria-invalid={shouldShowFieldError('role')}
+            aria-describedby={describedBy('role')}
             className={getFieldClassName('role')}
             type="text"
             name="role"
             placeholder="Product Manager, Founder, Analyst..."
+            autoComplete="organization-title"
             value={formData.role}
             onChange={handleChange}
             onBlur={handleBlur}
           />
+          {renderFieldError('role')}
         </label>
       </div>
     </div>
@@ -420,6 +580,9 @@ function App() {
             Customer type <span className="text-rose-400">*</span>
           </span>
           <select
+            id="field-customerType"
+            aria-invalid={shouldShowFieldError('customerType')}
+            aria-describedby={describedBy('customerType')}
             className={getFieldClassName('customerType', selectClass)}
             name="customerType"
             value={formData.customerType}
@@ -433,6 +596,7 @@ function App() {
               </option>
             ))}
           </select>
+          {renderFieldError('customerType')}
         </label>
 
         <label className={labelClass}>
@@ -440,6 +604,9 @@ function App() {
             Age range or business size <span className="text-rose-400">*</span>
           </span>
           <select
+            id="field-businessSize"
+            aria-invalid={shouldShowFieldError('businessSize')}
+            aria-describedby={describedBy('businessSize')}
             className={getFieldClassName('businessSize', selectClass)}
             name="businessSize"
             value={formData.businessSize}
@@ -453,6 +620,7 @@ function App() {
               </option>
             ))}
           </select>
+          {renderFieldError('businessSize')}
         </label>
       </div>
 
@@ -461,6 +629,9 @@ function App() {
           Main problem or pain point <span className="text-rose-400">*</span>
         </span>
         <textarea
+          id="field-painPoint"
+          aria-invalid={shouldShowFieldError('painPoint')}
+          aria-describedby={describedBy('painPoint', fieldHintId('painPoint'))}
           className={getFieldClassName('painPoint', textareaClass)}
           name="painPoint"
           placeholder="Describe the biggest issue you are trying to solve."
@@ -468,7 +639,10 @@ function App() {
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        <span className={helperClass}>The more specific, the more useful for our research.</span>
+        {renderFieldError('painPoint')}
+        <span className={helperClass} id={fieldHintId('painPoint')}>
+          The more specific, the more useful for our research.
+        </span>
       </label>
 
       <label className={labelClass}>
@@ -476,6 +650,9 @@ function App() {
           Current solution you use <span className="text-rose-400">*</span>
         </span>
         <textarea
+          id="field-currentSolution"
+          aria-invalid={shouldShowFieldError('currentSolution')}
+          aria-describedby={describedBy('currentSolution')}
           className={getFieldClassName('currentSolution', textareaClass)}
           name="currentSolution"
           placeholder="Spreadsheets, internal process, software tools, manual work..."
@@ -483,6 +660,7 @@ function App() {
           onChange={handleChange}
           onBlur={handleBlur}
         />
+        {renderFieldError('currentSolution')}
       </label>
 
       <label className={labelClass}>
@@ -490,6 +668,9 @@ function App() {
           How often do you experience the problem? <span className="text-rose-400">*</span>
         </span>
         <select
+          id="field-frequency"
+          aria-invalid={shouldShowFieldError('frequency')}
+          aria-describedby={describedBy('frequency')}
           className={getFieldClassName('frequency', `${selectClass} max-w-[420px]`)}
           name="frequency"
           value={formData.frequency}
@@ -503,6 +684,7 @@ function App() {
             </option>
           ))}
         </select>
+        {renderFieldError('frequency')}
       </label>
     </div>
   )
@@ -556,6 +738,9 @@ function App() {
             Preferred follow-up channel <span className="text-rose-400">*</span>
           </span>
           <select
+            id="field-preferredFollowUp"
+            aria-invalid={shouldShowFieldError('preferredFollowUp')}
+            aria-describedby={describedBy('preferredFollowUp')}
             className={getFieldClassName('preferredFollowUp', selectClass)}
             name="preferredFollowUp"
             value={formData.preferredFollowUp}
@@ -569,6 +754,7 @@ function App() {
               </option>
             ))}
           </select>
+          {renderFieldError('preferredFollowUp')}
         </label>
 
         <label className={labelClass}>
@@ -576,14 +762,19 @@ function App() {
             Location <span className="text-[var(--color-text)]">(optional)</span>
           </span>
           <input
-            className={inputClass}
+            id="field-location"
+            aria-invalid={shouldShowFieldError('location')}
+            aria-describedby={describedBy('location')}
+            className={getFieldClassName('location')}
             type="text"
             name="location"
             placeholder="City, region, or service area"
+            autoComplete="address-level2"
             value={formData.location}
             onChange={handleChange}
             onBlur={handleBlur}
           />
+          {renderFieldError('location')}
         </label>
       </div>
 
@@ -592,35 +783,43 @@ function App() {
           Additional notes <span className="text-[var(--color-text)]">(optional)</span>
         </span>
         <textarea
-          className={textareaClass}
+          id="field-additionalNotes"
+          aria-invalid={shouldShowFieldError('additionalNotes')}
+          aria-describedby={describedBy('additionalNotes')}
+          className={getFieldClassName('additionalNotes', textareaClass)}
           name="additionalNotes"
           placeholder="Anything else that would help us understand your workflow, constraints, or preferred timing."
           value={formData.additionalNotes}
           onChange={handleChange}
           onBlur={handleBlur}
         />
+        {renderFieldError('additionalNotes')}
       </label>
 
-      <label
-        className={`flex items-start gap-3 rounded-2xl border bg-[var(--color-surface)] p-4 text-[var(--color-text)] ${
-          shouldShowFieldError('consent')
-            ? 'border-rose-500'
-            : 'border-[var(--color-surface)]'
-        }`}
-      >
-        <input
-          className="mt-1 h-4 w-4 accent-[var(--color-secondary)]"
-          type="checkbox"
-          name="consent"
-          checked={formData.consent}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <span className="text-sm leading-6">
-          I consent to being contacted for a brief follow-up conversation regarding this
-          research intake.
-        </span>
-      </label>
+      <div className="grid gap-2">
+        <label
+          className={`flex cursor-pointer items-start gap-3 rounded-2xl border bg-[var(--color-surface)] p-4 text-[var(--color-text)] ${
+            shouldShowFieldError('consent') ? 'border-rose-500' : 'border-[var(--color-surface)]'
+          }`}
+        >
+          <input
+            id="field-consent"
+            className="mt-1 h-4 w-4 accent-[var(--color-secondary)]"
+            type="checkbox"
+            name="consent"
+            checked={formData.consent}
+            aria-invalid={shouldShowFieldError('consent')}
+            aria-describedby={describedBy('consent')}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <span className="text-sm leading-6">
+            I consent to being contacted for a brief follow-up conversation regarding this
+            research intake.
+          </span>
+        </label>
+        {renderFieldError('consent')}
+      </div>
     </div>
   )
 
