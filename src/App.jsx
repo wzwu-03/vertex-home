@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
   const [submitted, setSubmitted] = useState(false)
@@ -137,23 +137,6 @@ function App() {
     'Occasionally',
   ]
 
-  const budgetOptions = [
-    'No set budget',
-    'Under $100/month',
-    '$100-$500/month',
-    '$500-$2,000/month',
-    '$2,000+/month',
-    'Prefer not to say',
-  ]
-
-  const timelineOptions = [
-    'Immediately',
-    'Within 1 month',
-    'Within 3 months',
-    'Within 6 months',
-    'Just exploring',
-  ]
-
   const followUpOptions = [
     'Email',
     'Phone call',
@@ -198,8 +181,6 @@ function App() {
     }
 
     if (step === 3) {
-      if (!formData.budgetExpectation.trim()) errors.budgetExpectation = true
-      if (!formData.timeline.trim()) errors.timeline = true
       if (!formData.preferredFollowUp.trim()) errors.preferredFollowUp = true
       if (!formData.consent) errors.consent = true
     }
@@ -207,10 +188,14 @@ function App() {
     return errors
   }
 
-  const currentErrors = useMemo(() => getStepErrors(currentStep), [formData, currentStep])
+  const currentErrors = getStepErrors(currentStep)
 
   const shouldShowFieldError = (field) => {
-    return Boolean(currentErrors[field] && (touched[field] || attemptedStepAdvance))
+    if (field === 'consent') {
+      return Boolean(currentErrors[field] && (touched[field] || attemptedStepAdvance))
+    }
+
+    return Boolean(currentErrors[field] && touched[field])
   }
 
 
