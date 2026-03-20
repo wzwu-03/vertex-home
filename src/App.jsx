@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const LIMITS = {
   fullName: { min: 2, max: 120 },
@@ -34,10 +34,15 @@ function validateOptionalPhone(value) {
 }
 
 function App() {
+  const STEP_FIELDS = {
+    1: ['fullName', 'email', 'phone', 'companyName', 'industry', 'role'],
+    2: ['customerType', 'businessSize', 'painPoint', 'currentSolution', 'frequency'],
+    3: ['preferredFollowUp', 'location', 'additionalNotes', 'consent'],
+  }
+
   const [submitted, setSubmitted] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [touched, setTouched] = useState({})
-  const [attemptedStepAdvance, setAttemptedStepAdvance] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window === 'undefined') return false
 
@@ -285,18 +290,20 @@ function App() {
     return errors
   }
 
-  const currentErrors = useMemo(() => getStepErrors(currentStep), [formData, currentStep])
+  const currentErrors = getStepErrors(currentStep)
 
   const shouldShowFieldError = (field) => {
-    return Boolean(currentErrors[field] && (touched[field] || attemptedStepAdvance))
+    return Boolean(currentErrors[field] && touched[field])
   }
 
-  const markFieldsTouched = (fields) => {
+  const clearStepTouched = (step) => {
     setTouched((current) => {
       const next = { ...current }
-      for (const key of fields) {
-        next[key] = true
+
+      for (const key of STEP_FIELDS[step] ?? []) {
+        delete next[key]
       }
+
       return next
     })
   }
@@ -316,18 +323,18 @@ function App() {
     const errors = getStepErrors(currentStep)
 
     if (Object.keys(errors).length > 0) {
-      setAttemptedStepAdvance(true)
-      markFieldsTouched(Object.keys(errors))
       return
     }
 
-    setCurrentStep((step) => Math.min(step + 1, 3))
-    setAttemptedStepAdvance(false)
+    const nextStep = Math.min(currentStep + 1, 3)
+    clearStepTouched(nextStep)
+    setCurrentStep(nextStep)
   }
 
   const goBack = () => {
-    setCurrentStep((step) => Math.max(step - 1, 1))
-    setAttemptedStepAdvance(false)
+    const previousStep = Math.max(currentStep - 1, 1)
+    clearStepTouched(previousStep)
+    setCurrentStep(previousStep)
   }
 
   const handleSubmit = (event) => {
@@ -338,23 +345,20 @@ function App() {
     const step3Errors = getStepErrors(3)
 
     if (Object.keys(step1Errors).length > 0) {
+      clearStepTouched(1)
       setCurrentStep(1)
-      setAttemptedStepAdvance(true)
-      markFieldsTouched(Object.keys(step1Errors))
       return
     }
 
     if (Object.keys(step2Errors).length > 0) {
+      clearStepTouched(2)
       setCurrentStep(2)
-      setAttemptedStepAdvance(true)
-      markFieldsTouched(Object.keys(step2Errors))
       return
     }
 
     if (Object.keys(step3Errors).length > 0) {
+      clearStepTouched(3)
       setCurrentStep(3)
-      setAttemptedStepAdvance(true)
-      markFieldsTouched(Object.keys(step3Errors))
       return
     }
 
