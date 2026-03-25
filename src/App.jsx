@@ -43,6 +43,7 @@ function App() {
   const [submitted, setSubmitted] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [touched, setTouched] = useState({})
+  const [attemptedSteps, setAttemptedSteps] = useState({})
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window === 'undefined') return false
 
@@ -51,7 +52,6 @@ function App() {
 
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   })
-/* const [attemptedSteps, setAttemptedSteps] = useState({}) */
 
   useEffect(() => {
     const theme = isDarkMode ? 'dark' : 'light'
@@ -293,7 +293,9 @@ function App() {
   const currentErrors = getStepErrors(currentStep)
 
   const shouldShowFieldError = (field) => {
-    return Boolean(currentErrors[field] && touched[field])
+    return Boolean(
+      currentErrors[field] && (touched[field] || attemptedSteps[currentStep]),
+    )
   }
 
   const clearStepTouched = (step) => {
@@ -304,6 +306,16 @@ function App() {
         delete next[key]
       }
 
+      return next
+    })
+  }
+
+  const markFieldsTouched = (fields) => {
+    setTouched((current) => {
+      const next = { ...current }
+      for (const field of fields) {
+        next[field] = true
+      }
       return next
     })
   }
@@ -323,11 +335,27 @@ function App() {
     const errors = getStepErrors(currentStep)
 
     if (Object.keys(errors).length > 0) {
+      setAttemptedSteps((current) => ({
+        ...current,
+        [currentStep]: true,
+      }))
+      markFieldsTouched(Object.keys(errors))
       return
     }
 
     const nextStep = Math.min(currentStep + 1, 3)
     clearStepTouched(nextStep)
+
+    // Entering the final step after a successful advance: no red state yet
+    // until the user tries to submit or advance with invalid input.
+    if (nextStep === 3) {
+      setAttemptedSteps((current) => {
+        const next = { ...current }
+        delete next[3]
+        return next
+      })
+    }
+
     setCurrentStep(nextStep)
   }
 
@@ -347,18 +375,33 @@ function App() {
     if (Object.keys(step1Errors).length > 0) {
       clearStepTouched(1)
       setCurrentStep(1)
+      setAttemptedSteps((current) => ({
+        ...current,
+        1: true,
+      }))
+      markFieldsTouched(Object.keys(step1Errors))
       return
     }
 
     if (Object.keys(step2Errors).length > 0) {
       clearStepTouched(2)
       setCurrentStep(2)
+      setAttemptedSteps((current) => ({
+        ...current,
+        2: true,
+      }))
+      markFieldsTouched(Object.keys(step2Errors))
       return
     }
 
     if (Object.keys(step3Errors).length > 0) {
       clearStepTouched(3)
       setCurrentStep(3)
+      setAttemptedSteps((current) => ({
+        ...current,
+        3: true,
+      }))
+      markFieldsTouched(Object.keys(step3Errors))
       return
     }
 
