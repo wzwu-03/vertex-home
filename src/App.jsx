@@ -310,6 +310,14 @@ function App() {
     })
   }
 
+  const clearStepAttempted = (step) => {
+    setAttemptedSteps((current) => {
+      const next = { ...current }
+      delete next[step]
+      return next
+    })
+  }
+
   const markFieldsTouched = (fields) => {
     setTouched((current) => {
       const next = { ...current }
@@ -345,16 +353,7 @@ function App() {
 
     const nextStep = Math.min(currentStep + 1, 3)
     clearStepTouched(nextStep)
-
-    // Entering the final step after a successful advance: no red state yet
-    // until the user tries to submit or advance with invalid input.
-    if (nextStep === 3) {
-      setAttemptedSteps((current) => {
-        const next = { ...current }
-        delete next[3]
-        return next
-      })
-    }
+    clearStepAttempted(nextStep)
 
     setCurrentStep(nextStep)
   }
@@ -362,11 +361,17 @@ function App() {
   const goBack = () => {
     const previousStep = Math.max(currentStep - 1, 1)
     clearStepTouched(previousStep)
+    clearStepAttempted(previousStep)
     setCurrentStep(previousStep)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    if (currentStep < 3) {
+      goNext()
+      return
+    }
 
     const step1Errors = getStepErrors(1)
     const step2Errors = getStepErrors(2)

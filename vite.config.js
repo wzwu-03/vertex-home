@@ -10,4 +10,5 @@ export default defineConfig({
   server: {
     allowedHosts: ['aggregable-uncleft-gaylord.ngrok-free.dev'],
   },
+  base: '/vertex-home/',
 })
