@@ -1,0 +1,34 @@
+## Design Context
+
+### Users
+**Primary audience:** Private clinic owners and operators in Ontario (Toronto/GTA focus). These are time-poor, skeptical decision-makers — often a physician who also runs a business, or a practice owner who fields a lot of outreach. They arrive with low trust and limited patience. The interface needs to establish credibility within the first few seconds and communicate exactly what's being asked of them before they'll engage.
+
+**Use case:** Qualifying and intake for a research initiative. The job-to-be-done is: "Quickly understand if this is worth 10 minutes of my time, feel confident it's legitimate, and then complete the intake form."
+
+**Emotional goal:** Confidence, trust, and a sense of being respected as a professional — not marketed to.
+
+### Brand Personality
+**Three words:** Authoritative. Restrained. Precise.
+
+Think consultancy research report, not startup landing page. The brand should feel like it belongs in the same visual vocabulary as McKinsey Healthcare, Deloitte sector briefs, or a well-designed academic institution site. Serious without being cold; credible without being stiff.
+
+**Not:** Purple gradient startup energy, AI-generated glow aesthetics, urgent marketing copy, or anything that reads as "we're trying to get your data."
+
+### Aesthetic Direction
+- **Theme:** Dark mode, intentional. The dark palette is a deliberate brand choice — it signals seriousness and differentiates from typical healthcare SaaS.
+- **Visual tone:** Institutional authority with restrained modernism. Clean grid-based layouts with strong typographic hierarchy. Dense-but-breathable information presentation.
+- **Typography priority:** Display typeface with serious editorial character (NOT Inter, NOT Fraunces, NOT any reflex font). The body font should complement without competing. Think: something with optically-corrected letterforms, academic weight, clear counters.
+- **Color discipline:** The blue accent (#1e87e4) is fine as a utility/interactive color, but brand presence should come from typography and space, not color. No neon accents. No gradient text. No glowing anything.
+- **Anti-references:** No purple gradients, no cyan-on-dark "AI tool" aesthetics, no glassmorphism, no floating card stacks, no hero animations that delay content.
+
+### Design Principles
+
+1. **Trust before ask.** Every layout decision should earn credibility before the form demands anything. Headlines, social proof, and framing all serve to pre-validate Verex as legitimate research — not lead generation.
+
+2. **Respect the clock.** Clinic owners are time-poor. Layouts should be scannable in under 8 seconds. No theatrical reveals, no horizontal scroll, no buried information. What matters goes at the top.
+
+3. **Precision signals authority.** Tight typographic control, consistent spatial rhythm, and intentional whitespace communicate that this organization is rigorous. Sloppy spacing, inconsistent sizing, or decorative noise does the opposite.
+
+4. **Restraint IS the aesthetic.** Less ornamentation = more institutional authority. Every decorative element must justify its presence. If removing something makes the design feel more confident, remove it.
+
+5. **Healthcare context, not healthcare cliché.** Do not use stock-photography warmth, rounded-everything friendliness, or medical iconography. The audience IS in healthcare but they respond to B2B research credibility, not patient-facing softness.

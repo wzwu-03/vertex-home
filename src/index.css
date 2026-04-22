@@ -1,12 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #E2E8F0;
-  --color-secondary: #1e87e4;
-  --color-accent: #1e87e4;
-  --color-background: #020617;
-  --color-surface: #0F172A;
-  --color-text: #CBD5E1;
+  /* ── Backgrounds ── neutrals tinted toward clinical cool hue 220 */
+  --bg:             oklch(4.5%  0.011 222);
+  --surface:        oklch(8.5%  0.014 222);
+  --surface-2:      oklch(13%   0.013 222);
+  --border:         oklch(18%   0.016 222);
+  --border-subtle:  oklch(13%   0.012 222);
+
+  /* ── Text ── */
+  --text-primary:   oklch(92%   0.006 222);
+  --text-secondary: oklch(62%   0.010 222);
+  --text-muted:     oklch(40%   0.008 222);
+
+  /* ── Primary accent: clinical teal-blue ── */
+  --accent:         oklch(56%   0.13  213);
+  --accent-hover:   oklch(62%   0.14  213);
+  --accent-subtle:  oklch(56%   0.13  213 / 0.13);
+  --accent-dim:     oklch(56%   0.13  213 / 0.07);
+
+  /* ── Warm accent: muted gold — used very sparingly for human warmth ── */
+  --warm:           oklch(70%   0.11   78);
+  --warm-subtle:    oklch(70%   0.11   78 / 0.12);
+
+  /* ── Border glow ── */
+  --glow:           oklch(56%   0.13  213 / 0.22);
+
+  /* ── Legacy compat (form JSX references these) ── */
+  --color-primary:    var(--text-primary);
+  --color-secondary:  var(--accent);
+  --color-accent:     var(--accent);
+  --color-background: var(--bg);
+  --color-surface:    var(--surface);
+  --color-text:       var(--text-secondary);
 }
 
 html {
@@ -18,38 +44,70 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: var(--color-text);
-  background: var(--color-background);
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  color: var(--text-secondary);
+  background: var(--bg);
   overflow-x: hidden;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 220ms ease, color 220ms ease;
 }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
+button, input, select, textarea { font: inherit; }
+
+#root { min-height: 100vh; }
+
+/* ─── Scroll reveal ─────────────────────────────────────────────── */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-#root {
-  min-height: 100vh;
+.reveal {
+  animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.reveal-1 { animation-delay: 60ms; }
+.reveal-2 { animation-delay: 120ms; }
+.reveal-3 { animation-delay: 180ms; }
+.reveal-4 { animation-delay: 240ms; }
+
+/* ─── Nav scroll state ──────────────────────────────────────────── */
+.nav-scrolled {
+  background: oklch(4.5% 0.011 222 / 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--border);
 }
 
-@keyframes verex-hue {
-  0% {
-    filter: hue-rotate(0deg);
-  }
+/* ─── Decorative rules ──────────────────────────────────────────── */
+.section-rule {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border) 20%, var(--border) 80%, transparent);
+}
 
-  50% {
-    filter: hue-rotate(42deg);
-  }
+/* ─── Hero subtle grid ──────────────────────────────────────────── */
+.hero-grid-bg {
+  background-image:
+    linear-gradient(oklch(18% 0.016 222 / 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(18% 0.016 222 / 0.5) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
 
-  100% {
-    filter: hue-rotate(0deg);
+/* ─── Border glow utility ───────────────────────────────────────── */
+@layer utilities {
+  .border-glow {
+    box-shadow: 0 0 6px var(--glow);
   }
+}
+
+/* ─── Process connector line ────────────────────────────────────── */
+.process-line::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: calc(50% + 20px);
+  right: calc(-50% + 20px);
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
 }
