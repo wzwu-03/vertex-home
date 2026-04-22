@@ -41,6 +41,18 @@ VITE_SUPABASE_URL=...
 VITE_SUPABASE_ANON_KEY=...
 ```
 
+Optional for deployment path:
+
+```bash
+# Root deployment (default)
+VITE_APP_BASE_PATH=/
+
+# Subpath deployment example
+# VITE_APP_BASE_PATH=/vertex-home/
+```
+
+Note: local `npm run dev` always serves from `/` to avoid route/base-path issues on `http://localhost:5173/`.
+
 ## Admin routes
 
 - `/admin/login`

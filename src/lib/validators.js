@@ -70,8 +70,8 @@ export const followUpOptions = ['Email', 'Phone call', 'Text message', 'No prefe
 const optionalTrimmed = (max) =>
   z
     .string()
-    .transform((value) => value.trim())
-    .refine((value) => value.length <= max, `Must be ${max} characters or fewer.`)
+    .trim()
+    .max(max, `Must be ${max} characters or fewer.`)
 
 const optionalPhoneSchema = z
   .string()
@@ -85,12 +85,12 @@ const optionalPhoneSchema = z
 const intakeSchema = z.object({
   fullName: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(LIMITS.fullName.min, `Use at least ${LIMITS.fullName.min} characters.`)
     .max(LIMITS.fullName.max, `Keep your name under ${LIMITS.fullName.max} characters.`),
   email: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(1, 'Email is required.')
     .max(254, 'Email must be 254 characters or fewer.')
     .email('Please enter a valid email address.'),
@@ -98,38 +98,38 @@ const intakeSchema = z.object({
   companyName: optionalTrimmed(LIMITS.companyName.max),
   industry: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(1, 'Please select an industry.'),
   role: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(1, 'Role or job title is required.')
     .max(LIMITS.role.max, `Role must be ${LIMITS.role.max} characters or fewer.`),
   customerType: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(1, 'Please select a customer type.'),
   businessSize: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(1, 'Please select a business size.'),
   painPoint: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(LIMITS.painPoint.min, `Add a bit more detail (at least ${LIMITS.painPoint.min} characters).`)
     .max(LIMITS.painPoint.max, `Keep this under ${LIMITS.painPoint.max} characters.`),
   currentSolution: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(LIMITS.currentSolution.min, `Add more detail (at least ${LIMITS.currentSolution.min} characters).`)
     .max(LIMITS.currentSolution.max, `Keep this under ${LIMITS.currentSolution.max} characters.`),
   frequency: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(1, 'Please select how often you experience the problem.'),
   preferredFollowUp: z
     .string()
-    .transform((value) => value.trim())
+    .trim()
     .min(1, 'Please select a follow-up channel.'),
   location: optionalTrimmed(LIMITS.location.max),
   additionalNotes: optionalTrimmed(LIMITS.additionalNotes.max),
