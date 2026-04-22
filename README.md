@@ -1,6 +1,10 @@
 # Verex
 
-Verex is a React landing page built with Vite. It is designed as a branded front end today, with a clear path toward a future Supabase-backed form and submission workflow.
+Verex is a React + Vite application with:
+
+- Public intake landing page at `/`
+- Protected admin login at `/admin/login`
+- Admin dashboard routes under `/admin/*`
 
 ## Development
 
@@ -10,16 +14,10 @@ Install dependencies:
 npm install
 ```
 
-Start the local dev server:
+Start local dev server:
 
 ```bash
 npm run dev
-```
-
-Create a production build:
-
-```bash
-npm run build
 ```
 
 Run linting:
@@ -28,6 +26,26 @@ Run linting:
 npm run lint
 ```
 
-## Next Step
+Create production build:
 
-The landing page already includes a front-end intake form. The next implementation phase is connecting that form to Supabase so submissions can be stored and processed through a backend workflow.
+```bash
+npm run build
+```
+
+## Required environment variables
+
+Create a `.env` file (or copy `.env.example`) and set:
+
+```bash
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+```
+
+## Admin routes
+
+- `/admin/login`
+- `/admin`
+- `/admin/submissions`
+- `/admin/submissions/:id`
+- `/admin/analytics`
+- `/admin/settings`
