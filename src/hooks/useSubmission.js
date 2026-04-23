@@ -82,3 +82,43 @@ export function useUpsertSubmissionReview(id) {
     },
   })
 }
+
+export function useDeleteSubmission(id) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!supabase) {
+        throw new Error('Supabase is not configured.')
+      }
+      if (!id) {
+        throw new Error('Missing submission id for delete.')
+      }
+
+      const deleteWhereId = async (table, key = 'submission_id') => {
+        const result = await supabase.from(table).delete().eq(key, id)
+        if (result.error && result.error.code !== '42P01') {
+          throw new Error(`Failed deleting ${table}: ${result.error.message}`)
+        }
+      }
+
+      await Promise.all([
+        deleteWhereId('activity_log'),
+        deleteWhereId('submission_tags'),
+        deleteWhereId('submission_reviews'),
+      ])
+
+      const submissionDelete = await supabase.from('submissions').delete().eq('id', id)
+      if (submissionDelete.error) {
+        throw new Error(`Failed deleting submissions: ${submissionDelete.error.message}`)
+      }
+
+      return true
+    },
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ['submission', id] })
+      queryClient.invalidateQueries({ queryKey: ['submissions'] })
+      queryClient.invalidateQueries({ queryKey: ['analytics'] })
+    },
+  })
+}

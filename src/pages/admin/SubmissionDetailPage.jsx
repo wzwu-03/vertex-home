@@ -1,9 +1,9 @@
 import { ChevronLeft } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import SubmissionNotesPanel from '../../components/admin/SubmissionNotesPanel'
 import SubmissionStatusBadge from '../../components/admin/SubmissionStatusBadge'
-import { useSubmission, useUpsertSubmissionReview } from '../../hooks/useSubmission'
+import { useDeleteSubmission, useSubmission, useUpsertSubmissionReview } from '../../hooks/useSubmission'
 
 const statusOptions = ['new', 'in_review', 'contact_pending', 'contacted', 'qualified', 'closed']
 const followUpOptions = ['not_started', 'scheduled', 'contacted', 'waiting_response', 'closed']
@@ -50,8 +50,10 @@ function Prose({ label, text }) {
 
 export default function SubmissionDetailPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const submissionQuery = useSubmission(id)
   const upsertReview = useUpsertSubmissionReview(id)
+  const deleteSubmission = useDeleteSubmission(id)
 
   const submission = submissionQuery.data?.submission
   const review = submissionQuery.data?.review
@@ -97,6 +99,19 @@ export default function SubmissionDetailPage() {
     })
   }
 
+  const onDeleteSubmission = async () => {
+    if (!submission) return
+
+    const isConfirmed = window.confirm(
+      `Delete submission from ${submission.full_name}? This will also remove related review, tags, and activity records.`,
+    )
+
+    if (!isConfirmed) return
+
+    await deleteSubmission.mutateAsync()
+    navigate('/admin/submissions', { replace: true })
+  }
+
   if (submissionQuery.isLoading) {
     return (
       <div className="border-glow rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 text-[0.82rem] text-[var(--text-secondary)]">
@@ -126,9 +141,22 @@ export default function SubmissionDetailPage() {
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <h1 className="flex-1 text-[1.2rem] font-bold tracking-[-0.02em] text-[var(--text-primary)]">{title}</h1>
+          <button
+            type="button"
+            onClick={onDeleteSubmission}
+            disabled={deleteSubmission.isPending}
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-rose-500/40 px-3 text-[0.75rem] font-semibold text-rose-300 transition hover:bg-rose-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {deleteSubmission.isPending ? 'Deleting…' : 'Delete submission'}
+          </button>
           <SubmissionStatusBadge status={merged.status} />
         </div>
         <p className="mt-1 text-[0.75rem] text-[var(--text-muted)]">Submitted {prettyDate(submission.created_at)}</p>
+        {deleteSubmission.isError ? (
+          <p className="mt-2 text-[0.75rem] text-rose-400">
+            {deleteSubmission.error?.message || 'Unable to delete this submission.'}
+          </p>
+        ) : null}
       </div>
 
       {/* Main two-col grid */}
