@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { AuthContext } from './auth-context'
 import { isSupabaseConfigured, supabase } from '../lib/supabase'
 
@@ -65,7 +66,10 @@ export function AppProviders({ children }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>
+      <AuthContext.Provider value={authValue}>
+        {children}
+        <Analytics />
+      </AuthContext.Provider>
     </QueryClientProvider>
   )
 }
